@@ -1,6 +1,11 @@
 Nathan Hinton
 This is a project to play a states and capitals game.
 
+Deps:
+pytesseract
+Image
+pynput
+
 Math:
 I learned about functions and looping an input through the function
 
