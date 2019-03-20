@@ -1,0 +1,13 @@
+Nathan Hinton
+This is a project to play a states and capitals game.
+
+Math:
+I learned about functions and looping an input through the function
+
+
+
+Starting by allowing buttons to move the mouse to the correct position and clicking in a grid to be able to do the smaller states.
+I am using pynput to controll the mouse to click in different spots on the screen where the state that matches the capital is.
+
+I will do this by moving the mouse into the top left corner then I will move the mouse to the correct position to click on the state.  I also need to have some way to get stat from the screen to find out which capital is being displayed and where the state is.
+
