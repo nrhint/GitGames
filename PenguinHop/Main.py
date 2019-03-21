@@ -110,12 +110,12 @@ def on_press(key):
     elif key == exitKey:
         listener.stop()
 
-###Start the image stuff:
+#Start the image stuff:
 import pytesseract
 from PIL import Image
 
-testPath = '/home/nathan/Pictures/Screenshot from 2019-02-16 13-11-49.png'
+testPath = '/home/nathan/Pictures/screen.png'
 print(pytesseract.image_to_string(Image.open(testPath)))
 
-with Listener(on_press=on_press) as listener:
-    listener.join()
+##with Listener(on_press=on_press) as listener:
+##    listener.join()
