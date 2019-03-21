@@ -9,10 +9,21 @@ pynput
 Math:
 I learned about functions and looping an input through the function
 
-
+Resources:
+  Image (PIL.Image):
+pip3 install Pillow
+  Pynput:
+pip3 install pynput
+  Pytesseract:
+https://www.linux.com/blog/using-tesseract-ubuntu
+http://leptonica.com/download.html
+  Game page:
+http://www.abcya.com/us_states_and_capitals.htm
 
 Starting by allowing buttons to move the mouse to the correct position and clicking in a grid to be able to do the smaller states.
 I am using pynput to controll the mouse to click in different spots on the screen where the state that matches the capital is.
 
 I will do this by moving the mouse into the top left corner then I will move the mouse to the correct position to click on the state.  I also need to have some way to get stat from the screen to find out which capital is being displayed and where the state is.
 
+I am moving on to the image processing. This is the harder part as I have to get pytesseract working. I was trying to install it using pip3 install pytesseract but it was not working. I went to the first link in Resources-Pytesseract and followed the instructions there changing the version from 73 to 78 and downloading the source from the website.
+I have installed tesseract and am now downloading the lang files. This should alow me to use the package properly. I can now import it and start it and get a error for no lang defined. this is better than the one that was not in path.
