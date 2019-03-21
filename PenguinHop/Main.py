@@ -16,7 +16,7 @@ b = KeyCode(char='2')
 c = KeyCode(char='3')
 d = KeyCode(char='4')
 
-y = 325
+y = 315
 
 def resetMouse():
     mouse.move(-2000, -2000)
@@ -24,11 +24,11 @@ def resetMouse():
 def click(x):
     resetMouse()
     mouse.move(x, y)
-    for a in range(-30, 40, 10):
+    for a in range(-25, 35, 10):
         #resetMouse()
         mouse.move(a, 0)
         #print(x+a, y)
-        for z in range(-30, 40, 10):
+        for z in range(-25, 35, 10):
             #resetMouse()
             mouse.move(0, z)
             mouse.click(Button.left)
@@ -54,16 +54,16 @@ def on_press(key):
     elif key == c:
         click(775)
     elif key == d:
-        click(1000)
+        click(1050)
     elif key == exitKey:
         listener.stop()
 
-#Start the image stuff:
-import pytesseract
-from PIL import Image
-
-testPath = '/home/nathan/Pictures/Screenshot from 2019-02-16 13-11-49.png'
-print(tesseract.image_to_string(Image.open(testPath)))
+###Start the image stuff:
+##import pytesseract
+##from PIL import Image
 ##
-##with Listener(on_press=on_press) as listener:
-##    listener.join()
+##testPath = '/home/nathan/Pictures/Screenshot from 2019-02-16 13-11-49.png'
+##print(pytesseract.image_to_string(Image.open(testPath)))
+
+with Listener(on_press=on_press) as listener:
+    listener.join()
