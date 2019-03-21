@@ -9,6 +9,8 @@ from pynput.keyboard import Listener, KeyCode
 
 mouse = Controller()
 
+#name TestBotx
+#where x != 0
 #Define the keys used:
 exitKey = KeyCode(char='q')
 a = KeyCode(char='1')
@@ -112,10 +114,36 @@ def on_press(key):
 
 #Start the image stuff:
 import pytesseract
-from PIL import Image
+from PIL import Image, ImageEnhance, ImageFilter
+import tempfile
+import pyscreenshot as ss
+print("Loading...")
 
-testPath = '/home/nathan/Pictures/screen.png'
-print(pytesseract.image_to_string(Image.open(testPath)))
+#Defineing things:
+def set_image_dpi(file_path):
+    im = Image.open(file_path)
+    length_x, width_y = im.size
+    factor = min(1, float(1024.0 / length_x))
+    size = int(factor * length_x), int(factor * width_y)
+    im_resized = im.resize(size, Image.ANTIALIAS)
+    temp_file = tempfile.NamedTemporaryFile(delete=False,   suffix='.png')
+    temp_filename = temp_file.name
+    im_resized.save(temp_filename, dpi=(300, 300))
+    return temp_filename
+
+##sleep(2)
+##im = ss.grab((200, 200, 1100, 600))
+im = Image.open('save.png')
+text = pytesseract.image_to_string(im)
+print("Searching")
+for s in stateAndCapsList:
+    if s in text:
+        print(stateAndCapsList[s])
+
+print()
+print("DATA")
+print(text)
 
 ##with Listener(on_press=on_press) as listener:
 ##    listener.join()
+

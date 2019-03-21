@@ -27,4 +27,6 @@ I will do this by moving the mouse into the top left corner then I will move the
 
 I am moving on to the image processing. This is the harder part as I have to get pytesseract working. I was trying to install it using pip3 install pytesseract but it was not working. I went to the first link in Resources-Pytesseract and followed the instructions there changing the version from 73 to 78 and downloading the source from the website.
 I have installed tesseract and am now downloading the lang files. This should alow me to use the package properly. I can now import it and start it and get a error for no lang defined. this is better than the one that was not in path.
-Installed tesseract and it is working kind of. I need to crop the image so I only get what I want. I am installing pyautogui to take screenshots of the screen
+Installed tesseract and it is working kind of. I need to crop the image so I only get what I want. I am installing pyscreenshot to take screenshots of the screen. This allows me to take only a portion of the screen that I need.
+
+I am rying a different way to get the text off the screen. The image processing is slow and inaccurate. I might be able to train it better though. I will try to scrape the text off the page then search through the text.
