@@ -20,6 +20,12 @@ d = KeyCode(char='4')
 
 y = 315
 
+targetCords = (340, 340, 610, 380)
+state1 = (110, 50, 210, 150)
+state2 = (330, 50, 430, 150)
+state3 = (550, 50, 650, 150)
+state4 = (770, 50, 870, 150)
+
 stateAndCapsList ={
     'Montgomery':'al', 
     'Juneau':'ak', 
@@ -78,11 +84,11 @@ def resetMouse():
 def click(x):
     resetMouse()
     mouse.move(x, y)
-    for a in range(-25, 35, 10):
+    for a in range(-20, 30, 10):
         #resetMouse()
         mouse.move(a, 0)
         #print(x+a, y)
-        for z in range(-25, 35, 10):
+        for z in range(-20, 30, 10):
             #resetMouse()
             mouse.move(0, z)
             mouse.click(Button.left)
@@ -131,19 +137,37 @@ def set_image_dpi(file_path):
     im_resized.save(temp_filename, dpi=(300, 300))
     return temp_filename
 
-##sleep(2)
-##im = ss.grab((200, 200, 1100, 600))
-im = Image.open('save.png')
-text = pytesseract.image_to_string(im)
-print("Searching")
-for s in stateAndCapsList:
-    if s in text:
-        print(stateAndCapsList[s])
+sleep(2)
+##im = Image.open('screen.png')
+##text = pytesseract.image_to_string(im)
+##print("Searching")
+##for s in stateAndCapsList:
+##    if s in text:
+##        print(stateAndCapsList[s])
+##
+##print()
+##print("DATA")
+##print(text)
+its = pytesseract.image_to_string
 
-print()
-print("DATA")
-print(text)
+def displayData():
+    print(its(im.crop(targetCords)))
+    print(its(im.crop(state1)))
+    print(its(im.crop(state2)))
+    print(its(im.crop(state3)))
+    print(its(im.crop(state4)))
+    im.crop(targetCords).show()
+    im.crop(state1).show()
+    im.crop(state2).show()
+    im.crop(state3).show()
+    im.crop(state4).show()
 
 ##with Listener(on_press=on_press) as listener:
 ##    listener.join()
-
+x = 0
+while True:
+    print()
+    print(x)
+    im = ss.grab((200, 200, 1100, 600))
+    displayData()
+    x += 1
