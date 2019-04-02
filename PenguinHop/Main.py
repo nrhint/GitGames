@@ -18,7 +18,7 @@ b = KeyCode(char='2')
 c = KeyCode(char='3')
 d = KeyCode(char='4')
 
-y = 315
+y = 305
 
 targetCords = (340, 340, 610, 380)
 state1 = (110, 50, 210, 150)
@@ -114,7 +114,7 @@ def on_press(key):
     elif key == c:
         click(775)
     elif key == d:
-        click(1050)
+        click(1030)
     elif key == exitKey:
         listener.stop()
 
