@@ -16,7 +16,7 @@ green = './Green.png'
 yellow = './Yellow.png'
 
 #Round the game size to be nice:
-(width, height) = (widths*17, heights*17)
+(width, height) = (widths*size, heights*size)
 
 import pygame
 from random import choice
@@ -39,11 +39,14 @@ class Chip:
         else:
             print("!INVALID COLOR OPTION!")
         self.image = pygame.image.load(self.color).convert_alpha()
-        surface.blit(self.image, (self.x, self.y))
+        surface.blit(self.image, (self.x*size, self.y*size))
     def drop(self):
         pass#if a peice is not under it then fall down until peice is under
     def score(self):
         pass
+    def update(self, pos, color):
+        pass#This is for checking where the mouse was clicked and if this needs to drop/dissapear.
+
 
 #Square size = size
 def drawBG():
@@ -65,7 +68,7 @@ pygame.display.flip()
 chips = []
 for posx in range(widths):
     for posy in range(heights):
-        chips.append(Chip(screen, posx*size, posy*size, choice(choices)))
+        chips.append(Chip(screen, posx, posy, choice(choices)))
 
 pygame.display.flip()    
 
@@ -77,8 +80,11 @@ while running:
     for event in pygame.event.get():
         if event.type == pygame.MOUSEBUTTONUP:
             pos = pygame.mouse.get_pos()
+            pos = int(pos[0]/size), int(pos[1]/size)
             print(pos)
-            print(int(pos[0]/size), int(pos[1]/size))
+            for chip in chips:
+                if (chip.x, chip.y) == pos:
+                    print(chip.color)
         if event.type == pygame.QUIT:
             running = False
             pygame.quit()
