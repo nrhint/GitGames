@@ -5,7 +5,7 @@
 
 #Setup Vars:
 
-(widths, heights) = (20, 20)
+(widths, heights) = (10, 8)
 size = 20
 BLACK = (0, 0, 0)
 score = 0
@@ -22,7 +22,7 @@ clear = './Clear.png'
 (width, height) = (widths*size, heights*size)
 
 import pygame
-from random import choice
+from random import choice, randint
 from time import sleep
 
 choices = ['red', 'blue', 'green', 'yellow']
@@ -43,7 +43,7 @@ class Chip:
         elif color == 'white':
             self.color = white
         else:
-            print("!INVALID COLOR OPTION!")
+            ("!INVALID COLOR OPTION!")
         self.image = pygame.image.load(self.color)#.convert_alpha()
         self.surface.blit(self.image, (self.x*size, self.y*size))
     def draw(self, chips):#The chips are needed to know if something is under the chip.
@@ -90,6 +90,30 @@ for posx in range(widths):
     for posy in range(heights):
         allChips.append(Chip(screen, posx, posy, choice(choices)))
 
+def addColumn():
+    h = randint(1, heights)
+    #print(h)
+    for posy in range(h):
+        allChips.append(Chip(screen, widths-1, posy, choice(choices)))
+
+def findCol(chips):
+    total = []
+    there = []
+    for x in range(widths):
+        total.append(x)
+    for x in chips:
+        there.append(x.x)
+    for x in total:
+        if x not in there:
+            return x
+def checkMatches(chips):
+    for chip in chips:
+        c = getNextTo(chips, (chip.x, chip.y))
+        for test in c:
+            if chip.color == test.color:
+                return True
+    return False
+
 pygame.display.flip()    
 
 def reduce(lst):#This will eliminate duplicate entries in lists.
@@ -113,20 +137,21 @@ def getNextTo(chips, pos):
 
 #Main Loop:
 running = True
+count = 0
 while running:
-    #print("___________UPDATED SCREEN_________________")
+    pygame.display.flip()
     screen.fill(background_color)
     for chip in allChips:
         chip.draw(allChips)
     for event in pygame.event.get():
         if event.type == pygame.MOUSEBUTTONUP:
-            #Start the function for when chip is clisked:
+            changing = True
+            #Start to figure out what dissapears:
             chipsToDissapear = []
             pos = pygame.mouse.get_pos()
             pos = int(pos[0]/size), int(pos[1]/size)
             for chip in allChips:#Figure out which chip clicked and where
                 if (chip.x, chip.y) == pos:
-                    #print(pos)
                     clickedChip = chip
                     color = chip.color
                     chipsToDissapear.append(clickedChip)
@@ -163,7 +188,28 @@ while running:
             base = len(reduce(chipsToDissapear))
             score += base*(base-1)
             print("Score: %s" %score)
+            count = 0
+            changing = False
         if event.type == pygame.QUIT:
             running = False
             pygame.quit()
-    pygame.display.flip()
+            ###########
+    count +=1
+    if count > heights:
+        changing = True
+        bottom = []
+        for chip in allChips:
+            if chip.y == heights-1:
+                bottom.append(chip)
+        if len(bottom) < widths:
+            col = findCol(bottom)
+            for chip in allChips:
+                if chip.x > col:
+                    chip.x -= 1
+            addColumn()
+            changing = False
+    if checkMatches(allChips) == False and count > heights + 10:
+        #sleep(2)
+        pygame.quit()
+        print("GAME OVER!")
+        print("Your score: %s" %score)
