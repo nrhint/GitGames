@@ -5,9 +5,10 @@
 
 #Setup Vars:
 
-(widths, heights) = (3, 3)
+(widths, heights) = (20, 20)
 size = 20
 BLACK = (0, 0, 0)
+score = 0
 
 #File paths:
 red = './Red.png'
@@ -46,14 +47,20 @@ class Chip:
         self.image = pygame.image.load(self.color)#.convert_alpha()
         self.surface.blit(self.image, (self.x*size, self.y*size))
     def draw(self, chips):#The chips are needed to know if something is under the chip.
+        fall = True
+        #print(self.y, heights -1)
         if self.y == heights -1:
             self.update()
-        elif self.y != heights -1:
-            for chip in chips:
+            fall = False
+#        elif self.y != heights -1:
+        for chip in chips:
+            if chip.x == self.x:
                 if chip.y == self.y+1:
                     self.update()
-        else:
-            print("Falling")
+                    fall = False
+        if fall == True:
+            self.y += 1
+            self.update()
     def update(self):
         self.surface.blit(self.image, (self.x*size, self.y*size))
     def delete(self):
@@ -107,6 +114,7 @@ def getNextTo(chips, pos):
 #Main Loop:
 running = True
 while running:
+    #print("___________UPDATED SCREEN_________________")
     screen.fill(background_color)
     for chip in allChips:
         chip.draw(allChips)
@@ -138,8 +146,6 @@ while running:
             while check == True:
                 if nextIteration == []:
                     check = False
-                    #print(len(chipsToDissapear))
-                    print(len(reduce(chipsToDissapear)))
                 for chip in nextIteration:
                     chipsToDissapear.append(chip)
                     closeChips = getNextTo(allChips, (chip.x, chip.y))
@@ -147,7 +153,6 @@ while running:
                         if cChip in chipsToDissapear:
                             pass
                         elif cChip.color == color:
-                            
                             tempNextItration.append(cChip)
                 nextIteration = tempNextItration
                 tempNextItration = []
@@ -155,8 +160,10 @@ while running:
             for chip in chipsToDissapear:
                 chip.delete()
                 allChips.remove(chip)
+            base = len(reduce(chipsToDissapear))
+            score += base*(base-1)
+            print("Score: %s" %score)
         if event.type == pygame.QUIT:
             running = False
             pygame.quit()
-    sleep(1)
     pygame.display.flip()
