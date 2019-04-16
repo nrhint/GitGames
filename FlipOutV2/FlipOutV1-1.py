@@ -72,19 +72,61 @@ for posx in range(widths):
 
 pygame.display.flip()    
 
+def getNextTo(chips, pos):
+    x, y = pos
+    closeChips = []
+    for chip in chips:
+        if (chip.x, chip.y) == (x+1, y):
+            closeChips.append(chip)
+        elif (chip.x, chip.y) == (x-1, y):
+            closeChips.append(chip)
+        elif (chip.x, chip.y) == (x, y+1):
+            closeChips.append(chip)
+        elif (chip.x, chip.y) == (x, y-1):
+            closeChips.append(chip)
+        else:
+            pass
+    return closeChips
+
 #Main Loop:
 running = True
-##running = False
 while running:
     pygame.display.flip()
     for event in pygame.event.get():
         if event.type == pygame.MOUSEBUTTONUP:
+            #Start the function for when chip is clisked:
+            chipsToDissapear = []
             pos = pygame.mouse.get_pos()
             pos = int(pos[0]/size), int(pos[1]/size)
-            print(pos)
-            for chip in chips:
+            for chip in chips:#Figure out which chip clicked and where
                 if (chip.x, chip.y) == pos:
-                    print(chip.color)
+                    print(pos)
+                    clickedChip = chip
+                    color = chip.color
+                    chipsToDissapear.append(clickedChip)
+                    break
+            #Figure out if the ones next to it are the same color.
+            check = True
+            closeChips = getNextTo(chips, pos)
+            for chip in closeChips:
+                if chip in chipsToDissapear:
+                    pass
+                elif chip.color == color:
+                    chipsToDissapear.append(chip)
+                    nextItration.append(chip)
+            while check == True:
+                if nextIteration == []:
+                    check = False
+                for chip in nextIteration:
+                    
+                    closeChips = getNextTo(chips, pos)
+                    for chip in closeChips:
+                        if chip in chipsToDissapear:
+                            pass
+                        elif chip.color == color:
+                            chipsToDissapear.append(chip)
+                            nextItration.append(chip)
+                        
         if event.type == pygame.QUIT:
             running = False
             pygame.quit()
