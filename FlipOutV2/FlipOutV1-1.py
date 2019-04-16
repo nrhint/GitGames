@@ -139,6 +139,7 @@ def getNextTo(chips, pos):
 running = True
 count = 0
 while running:
+    #sleep(1)
     pygame.display.flip()
     screen.fill(background_color)
     for chip in allChips:
@@ -167,6 +168,8 @@ while running:
                 elif chip.color == color:
                     chipsToDissapear.append(chip)
                     nextIteration.append(chip)
+            if nextIteration == []:
+                break
             tempNextItration = []
             while check == True:
                 if nextIteration == []:
