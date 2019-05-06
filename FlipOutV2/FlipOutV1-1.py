@@ -5,7 +5,7 @@
 
 #Setup Vars:
 
-(widths, heights) = (10, 8)
+(widths, heights) = (10, 10)
 size = 20
 BLACK = (0, 0, 0)
 score = 0
@@ -92,7 +92,7 @@ for posx in range(widths):
 
 def addColumn():
     h = randint(1, heights)
-    #print(h)
+    print(h)
     for posy in range(h):
         allChips.append(Chip(screen, widths-1, posy, choice(choices)))
 
