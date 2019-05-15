@@ -3,13 +3,25 @@
 #This game is basd on the boot the Rythamist. It is about drawing lines and shapes
 
 #Here are the imports:
-import tkinter
-import pynput
+from tkinter import *
+
+
+#Here are the classes for handeling errors:
+class gameError(Exception):
+    print("Exception")
 
 class Game:
     #This class should handle the game management.
     def __init__(self):
-        pass
+        self.tk = Tk()
+        self.windowWidth = 500
+        self.windowHeight = 500
+        self.drawingWidth = None
+        self.drawingHeight = None
+    def createDrawingArea(self, x1, y1, x2, y2):
+        if x1 > self.windowWidth-1 or x2 > self.windowWidth-1:
+            raise GameError
+        self.drawingArea = Canvas(self.tk, width = self.drawingWidth, height = self.drawingHeight, bg = "white")
 
 class Drawing:
     #This is a parent class for all of the drawings that will be animated
@@ -22,6 +34,6 @@ class Drawing:
             drawing.update()
 
 class Player:
-    #This will handel all of the player input ad actions and then pass them to the correct place
+    #This will handle all of the player input ad actions and then pass them to the correct place
     def __init__(self):
         pass
