@@ -8,7 +8,7 @@ from tkinter import *
 
 #Here are the classes for handeling errors:
 class gameError(Exception):
-    print("Exception")
+    pass
 
 class Game:
     #This class should handle the game management.
@@ -19,8 +19,10 @@ class Game:
         self.drawingWidth = None
         self.drawingHeight = None
     def createDrawingArea(self, x1, y1, x2, y2):
-        if x1 > self.windowWidth-1 or x2 > self.windowWidth-1:
-            raise GameError
+        if x1 > self.windowWidth or x1 < 0:
+            raise GameError("x1 outside of the screen!")
+        elif x2 > self.windowWidth or x2 < 0:
+            raise GameError("x2 outside of the screen!")
         self.drawingArea = Canvas(self.tk, width = self.drawingWidth, height = self.drawingHeight, bg = "white")
 
 class Drawing:
