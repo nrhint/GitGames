@@ -6,7 +6,7 @@
 #Make the reload function more reliable.
 
 screen = (20, 125, 620, 525)#(375, 225, 775, 800)
-height = 500
+height = 400
 width = 600
 
 import pyscreenshot as ss
@@ -37,8 +37,8 @@ sleep(3)
 while True:
     dat = ss.grab(screen)
     dat.show()
-    for x in range(0, height):
-        if dat.getpixel((x, 0)) == (0, 0, 0):
-            click((x, 0))
+    for y in range(0, height):
+        if dat.getpixel((0, y)) == (0, 0, 0):
+            click((0, y))
     reload()
     sleep(2)
