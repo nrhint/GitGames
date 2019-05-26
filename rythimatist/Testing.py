@@ -3,9 +3,9 @@ from tkinter import *
 
 b1 = "up"
 xold, yold = None, None
-display_width = '500'
-display_height = '500'
-canvas_width = '500'
+display_width = '1000'
+display_height = '1000'
+canvas_width = '1000'
 canvas_height = '500'
 def main():
     root = Tk()
