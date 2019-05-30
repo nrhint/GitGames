@@ -1,5 +1,20 @@
 ##Nathan Hinton
-##
+
+##TO DO:
+"""
+Main
+8 1
+[]
+[1, 10, 19, 28, 37, 46, 55, 64, 73]
+should be: [0, 9, 18, ..., 72]
+ROW:
+[]
+COL:
+['7', '5', '3', '1', '9', '8']
+
+['7', '5', '3', '1', '9', '8']
+['2', '4', '6']
+"""
 
 file = 'File1.txt'
 numbers = ['1', '2', '3', '4', '5', '6', '7', '8', '9']
@@ -26,8 +41,13 @@ def processData(rawData):#I am going to store the numbers in a map so that I can
             x +=1
     return data
 def getRow(data, rowNum):
+    
+    #rowNum = (rowNum-1)*9
     start = (rowNum-1) *9
-    end = (rowNum-1) *9+9
+    print(start)
+    
+    end = (rowNum-1) *9+8
+    print(end)
     row = []
     for item in data:
         if int(item)>=start and int(item)<=end:
@@ -36,7 +56,7 @@ def getRow(data, rowNum):
 def getCol(data, colNum):
     col = []
     for item in data:
-        if int(int(item)%colNum) == 0:
+        if int(item)%9 == colNum-1:
             col.append(item)
             #print(item)
     return col
@@ -51,18 +71,24 @@ def checkForMatch(data, number):
     if data[number] in numbers:
         return [number]
     row, col = findColRow(number)
+    #print(row, col)
     rowNums = getRow(data, row)
-    
-    colNums =getCol(data, col)
+    colNums = getCol(data, col)
     print(rowNums)
     print(colNums)
-##    for testValue in numbers:
-##        if testValue in nums:
-##            pass
-##        else:
-##            options.append(testValue)
     print()
+    print("ROW:")
+    print(getValues(data, rowNums))
+    print("COL:")
+    print(getValues(data, colNums))
+    nums = getValues(data, rowNums+colNums)
     print()
+    print(nums)
+    for testValue in numbers:
+        if testValue in nums:
+            pass
+        else:
+            options.append(testValue)
     return options
 def getValues(data, nums):
     dataOut = []
@@ -93,11 +119,6 @@ def main():
     #file = input("Filename: ")
     rawData = loadData(file)
     data = processData(rawData)
-    #Test displaying the third row:
-    row3 = getRow(data, 3)
-    #print(row3)
-    #for x in row3:
-        #print(getValues(data, x))
     print(checkForMatch(data, 63))
     return data
 
