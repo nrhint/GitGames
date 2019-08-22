@@ -60,7 +60,7 @@ def findColRow(number):
 def checkForMatch(data, number):
     options = []
     if data[number] in numbers:
-        return [number]
+        return data[number]
     col, row = findColRow(number)
     rowNums = getRow(data, row)#Cross hatch the place:
     colNums = getCol(data, col)
@@ -79,12 +79,14 @@ def checkForMatch(data, number):
 def method1(data):
     newData = data
     for place in data:
+        print('PLACE: %s'%place)
         newData = solveSpace(newData, place)
     return newData
 def getValues(data, nums):
     dataOut = []
     try:
         for x in nums:
+            #print(x)
             if data[x] == 0:
                 pass
             else:
@@ -105,7 +107,8 @@ def main():
     #file = input("Filename: ")
     rawData = loadData(file)
     data = processData(rawData)
-    print(checkForMatch(data, 63))
+    #print(checkForMatch(data, 63))
     return data
 
 if __name__ == '__main__':data = main()
+method1(data)
