@@ -1,6 +1,7 @@
 ##Nathan Hinton
 
 ##TO DO:
+#There is an issue with getBox. It is returning lists with negitave lists.
 
 file = 'File1.txt'
 numbers = ['1', '2', '3', '4', '5', '6', '7', '8', '9']
@@ -78,11 +79,13 @@ def checkForMatch(data, number):
         return 0
 def method1(data):
     newData = data
-    for place in data:
+    for place in range(len(data)):
+        print(data[place])
         print('PLACE: %s'%place)
         newData = solveSpace(newData, place)
     return newData
 def getValues(data, nums):
+    print(nums)
     dataOut = []
     try:
         for x in nums:
@@ -111,4 +114,9 @@ def main():
     return data
 
 if __name__ == '__main__':data = main()
-method1(data)
+
+#method1(data)
+
+
+checkForMatch(data, 2)
+checkForMatch(data, 3)
