@@ -5,7 +5,7 @@
 
 #Setup Vars:
 
-(widths, heights) = (10, 10)
+(widths, heights) = (30, 30)
 size = 20
 BLACK = (0, 0, 0)
 score = 0
@@ -50,13 +50,13 @@ class Chip:
         fall = True
         #print(self.y, heights -1)
         if self.y == heights -1:
-            self.update()
+            #self.update()
             fall = False
 #        elif self.y != heights -1:
         for chip in chips:
             if chip.x == self.x:
                 if chip.y == self.y+1:
-                    self.update()
+                    #self.update()
                     fall = False
         if fall == True:
             self.y += 1
