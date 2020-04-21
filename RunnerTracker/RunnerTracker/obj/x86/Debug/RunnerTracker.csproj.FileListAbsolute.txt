@@ -1,0 +1,33 @@
+C:\Users\ghint_000\Documents\Visual Studio 2010\Projects\RunnerTracker\RunnerTracker\bin\Debug\RunnerTracker.exe
+C:\Users\ghint_000\Documents\Visual Studio 2010\Projects\RunnerTracker\RunnerTracker\bin\Debug\RunnerTracker.pdb
+C:\Users\ghint_000\Documents\Visual Studio 2010\Projects\RunnerTracker\RunnerTracker\obj\x86\Debug\RunnerTracker.SelectRoleForm.resources
+C:\Users\ghint_000\Documents\Visual Studio 2010\Projects\RunnerTracker\RunnerTracker\obj\x86\Debug\RunnerTracker.Form1.resources
+C:\Users\ghint_000\Documents\Visual Studio 2010\Projects\RunnerTracker\RunnerTracker\obj\x86\Debug\RunnerTracker.NoNICs.resources
+C:\Users\ghint_000\Documents\Visual Studio 2010\Projects\RunnerTracker\RunnerTracker\obj\x86\Debug\RunnerTracker.Properties.Resources.resources
+C:\Users\ghint_000\Documents\Visual Studio 2010\Projects\RunnerTracker\RunnerTracker\obj\x86\Debug\RunnerTracker.TooManyNICs.resources
+C:\Users\ghint_000\Documents\Visual Studio 2010\Projects\RunnerTracker\RunnerTracker\obj\x86\Debug\RunnerTracker.csproj.GenerateResource.Cache
+C:\Users\ghint_000\Documents\Visual Studio 2010\Projects\RunnerTracker\RunnerTracker\obj\x86\Debug\RunnerTracker.exe
+C:\Users\ghint_000\Documents\Visual Studio 2010\Projects\RunnerTracker\RunnerTracker\obj\x86\Debug\RunnerTracker.pdb
+C:\Users\ghint_000\Documents\Visual Studio 2010\Projects\RunnerTracker\RunnerTracker\obj\x86\Debug\RunnerTracker.csprojResolveAssemblyReference.cache
+C:\Users\ghint_000\Documents\Visual Studio 2010\Projects\RunnerTracker\RunnerTracker\obj\x86\Debug\RunnerTracker.ImportRunnerData.resources
+C:\Users\ghint_000\Documents\Visual Studio 2010\Projects\RunnerTracker\RunnerTracker\obj\x86\Debug\RunnerTracker.NewRFIDNumber.resources
+C:\Users\ghint_000\Documents\Visual Studio 2010\Projects\RunnerTracker\RunnerTracker\obj\x86\Debug\RunnerTracker.Sounds.resources
+C:\Users\ghint_000\Documents\Visual Studio 2010\Projects\RunnerTracker\RunnerTracker\obj\x86\Debug\RunnerTracker.NICadapters.resources
+C:\Users\ghint_000\Documents\Visual Studio 2010\Projects\RunnerTracker\RunnerTracker\obj\x86\Debug\RunnerTracker.SelectStationForm.resources
+E:\Projects\RunnerTracker\RunnerTracker\bin\Debug\RunnerTracker.exe
+E:\Projects\RunnerTracker\RunnerTracker\bin\Debug\RunnerTracker.pdb
+E:\Projects\RunnerTracker\RunnerTracker\obj\x86\Debug\RunnerTracker.csprojAssemblyReference.cache
+E:\Projects\RunnerTracker\RunnerTracker\obj\x86\Debug\RunnerTracker.ImportRunnerData.resources
+E:\Projects\RunnerTracker\RunnerTracker\obj\x86\Debug\RunnerTracker.NICadapters.resources
+E:\Projects\RunnerTracker\RunnerTracker\obj\x86\Debug\RunnerTracker.SelectRoleForm.resources
+E:\Projects\RunnerTracker\RunnerTracker\obj\x86\Debug\RunnerTracker.Form1.resources
+E:\Projects\RunnerTracker\RunnerTracker\obj\x86\Debug\RunnerTracker.NewRFIDNumber.resources
+E:\Projects\RunnerTracker\RunnerTracker\obj\x86\Debug\RunnerTracker.NoNICs.resources
+E:\Projects\RunnerTracker\RunnerTracker\obj\x86\Debug\RunnerTracker.Properties.Resources.resources
+E:\Projects\RunnerTracker\RunnerTracker\obj\x86\Debug\RunnerTracker.SelectStationForm.resources
+E:\Projects\RunnerTracker\RunnerTracker\obj\x86\Debug\RunnerTracker.Sounds.resources
+E:\Projects\RunnerTracker\RunnerTracker\obj\x86\Debug\RunnerTracker.TooManyNICs.resources
+E:\Projects\RunnerTracker\RunnerTracker\obj\x86\Debug\RunnerTracker.csproj.GenerateResource.cache
+E:\Projects\RunnerTracker\RunnerTracker\obj\x86\Debug\RunnerTracker.csproj.CoreCompileInputs.cache
+E:\Projects\RunnerTracker\RunnerTracker\obj\x86\Debug\RunnerTracker.exe
+E:\Projects\RunnerTracker\RunnerTracker\obj\x86\Debug\RunnerTracker.pdb

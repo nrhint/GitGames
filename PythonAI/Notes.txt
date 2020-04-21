@@ -1,0 +1,13 @@
+Nathan Hinton	May 21 2019
+
+I am planning on using pytorch for using python to create an AI.  It looks like it has good suport and will be easy to use. It also has a coure that I can follow to learn how to use the tools.
+
+INSTALLING:
+
+REQUIREMENTS:
+pip3 install numpy
+
+INSTALL PACKAGE:
+pip3 install https://download.pytorch.org/whl/cpu/torch-1.0.1.post2-cp37-cp37m-linux_x86_64.whl
+pip3 install torchvision
+

@@ -1,0 +1,5 @@
+#Nathan Hinton
+#Format:
+#ImgPath, damage, rate, speed
+bullet1.png, 1, 10, 5
+bullet2.png, 2, 8, 4

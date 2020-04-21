@@ -1,0 +1,5 @@
+Idle with printing took 649 seconds on easy2.puzzle
+Idle without printing took 23.7 seconds on easy2.puzzle
+
+Cmd line with printing took 26.3 seconds on easy2.puzzle
+Cmd line without printing took 23.1 seconds on easy2.puzzle

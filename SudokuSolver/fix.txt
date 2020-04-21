@@ -1,0 +1,19 @@
+There are extra 9's left at the end of the runs. I am not 100 percent sure how to remove them. Some solutions are to pass a copy of the data to each of the new instances. I am trying that now.
+
+
+The program s not propperly clearing the data after it finds a mistake?
+There is something that is not working. 
+
+search for [4, 5, 6, 1, 7, 2, 9, 3, 8, 8, 9, 3, 5, 1, 0, 0, 1, 6, 7, 1, 0, 0, 0, 9, 4, 0, 0, 1, 0, 0, 7, 0, 0, 6, 9, 0, 9, 6, 7, 0, 0, 0, 2, 4, 3, 0, 0, 4, 0, 9, 6, 0, 0, 1, 0, 0, 9, 0, 0, 0, 0, 6, 4, 3, 2, 0, 0, 0, 7, 1, 8, 9, 6, 4, 0, 9, 0, 0, 0, 2, 0]
+
+
+
+050002038
+093500016
+710000400
+100700600
+967000243
+004006001
+009000064
+320007180
+640900020

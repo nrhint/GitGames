@@ -1,0 +1,7 @@
+[paths]
+default = ssh://gary@hintonclan.org/hg/RunnerTracker
+
+
+[tortoisehg]
+postpull = update
+autoresolve = True

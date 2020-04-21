@@ -1,0 +1,15 @@
+*
+* The file used to store the Race Info could be an xml or csv file.  I will choose to use a csv file.
+* The file can have a .csv or .txt suffix on its file name.
+* The format for this csv file will be thus:  (9 items, each on its own line)
+* Race Name:, Race Location:, Sponsor:, Race Date:, Start Time:, # of Runners:, Contact person:, Contact phone:, Packet Network/Frequency:
+*
+Race Name: Highline Trail Run testing
+Race Location: Highline Trail, Payson, AZ
+Sponsor: Exterra
+Race Date: 7/21/2017
+Start Time: 05:00 AM
+# of Runners: 203
+Contact person: Gary Hinton
+Contact phone: 480-833-7173
+Packet Frequency: (MESH)
