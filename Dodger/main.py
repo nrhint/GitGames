@@ -11,7 +11,7 @@ from random import randint
 totalStart = time()
 
 ##Vars that you can change:
-fps = 60 #This will dirrectly change the hardness of the game.
+fps = 60#This will dirrectly change the hardness of the game.
 step = 1/fps #Using time to delay if needed
 width, height = 800, 600
 spaceBetweenbads = fps
