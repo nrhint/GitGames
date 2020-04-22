@@ -56,7 +56,7 @@ while run == True:
     ##Add badGuys when needed:
     timeSinceLastAdd += 1
     if len(badGuys) < maxBads and timeSinceLastAdd> (spaceBetweenbads/level) :
-        badGuys.append(BadGuy(screen, 'gdffdghd.png', speed = speed))
+        badGuys.append(BadGuy(screen, 'badGuy.png', speed = speed))
         timeSinceLastAdd = 0
     ##Do all the thinking:
     badGuyRects = []
