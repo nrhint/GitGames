@@ -40,6 +40,10 @@ class Player:
             if touchingObject:
                 self.jump = False
                 self.jumpWait = False
+        if self.x < 0:
+            self.x = 0
+        elif self.x > self.display.get_width():
+            self.x = self.display.get_width
     def update(self):
         self.rect = pygame.Rect(self.x, self.y+self.height-2, self.width, 2)
         #pygame.draw.rect(self.display, (0, 255, 0), self.rect)

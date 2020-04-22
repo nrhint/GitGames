@@ -14,7 +14,7 @@ from colors import *
 
 ##vars you can change
 level = 'level1.level'
-fps = 60
+fps = 200
 frameStep = 1/fps
 width, height = (600, 480)
 backgroundColor = (0, 100, 200)
@@ -41,7 +41,10 @@ try:
     file = open(level, 'r').read()
     fileLines = file.split('\n')
     for fileLine in fileLines:
-        objects.append(eval(fileLine))
+        try:
+            objects.append(eval(fileLine))
+        except SyntaxError:
+            pass
 except FileNotFoundError:
     print("LEVEL NOT FOUND")
     print("Failed to open %s"%level)
