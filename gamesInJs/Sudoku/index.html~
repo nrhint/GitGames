@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>Sudoku</title>
+  <style>
+    * { padding: 0; margin: 0; }
+    canvas { background: #eee; display: block; margin: 0 auto; }
+  </style>
+</head>
+<body>
+
+  <canvas id="myCanvas" width="480" height="480"></canvas>
+
+  <script>
+    var canvas = document.getElementById("myCanvas");
+    var ctx = canvas.getContext("2d");
+    ctx.font = "30px Arial";
+    //ctx.fillText("Hello World", 10, 50); example font
+    var cellSize = 50;
+    var lineWidth = 1;
+    var gridColor = 'blue';
+    var textColor = 'orange';
+
+    puzzle = []
+    for (x = 0; x<9; x++){
+	puzzle[x] = []
+	for (y = 0; y<10; y++){
+	    puzzle[x][y] = y;
+	}
+    }
+
+    function drawGrid(){
+	for (x = 0; x<10; x++){//make a set of 10 vertical lines in the center of the screen
+	    //console.log(x);
+	    if (x%3 == 0){
+		lineWidth = 3;
+		//console.log("Thick")
+	    }else{
+		lineWidth = 1;
+	    }
+	    ctx.beginPath();
+	    ctx.rect(((canvas.width/2) - 4.5*cellSize) + x*cellSize, ((canvas.height/2) - 4.5*cellSize), lineWidth, cellSize*9);
+	    ctx.fillStyle = gridColor;
+	    ctx.fill();
+	    ctx.closePath();
+	    //draw the horz lines
+	    ctx.beginPath();
+	    ctx.rect(((canvas.width/2) - 4.5*cellSize), ((canvas.height/2) - 4.5*cellSize) + x*cellSize, cellSize*9, lineWidth);
+	    ctx.fillStyle = gridColor;
+	    ctx.fill();
+	    ctx.closePath();
+	}
+    }
+
+    function drawPuzzle() {
+	for (rowIndex = 0; rowIndex < puzzle.length; rowIndex++){
+	    for (colIndex = 0; colIndex < puzzle[rowIndex].length; colIndex++){
+		if (puzzle[rowIndex][colIndex] != 0) {
+		    ctx.fillColor = textColor
+		    ctx.fillText(puzzle[rowIndex][colIndex], ((canvas.width/2) - 4.5*cellSize)+cellSize*rowIndex+(cellSize/3), ((canvas.height/2) - 4.5*cellSize)+colIndex*cellSize-(cellSize/4));
+		}
+	    }
+	}
+    }
+    function draw() {
+	ctx.clearRect(0, 0, canvas.width, canvas.height);
+	drawGrid();
+	drawPuzzle();
+//	changePuzzle();
+    }
+    interval = setInterval(draw, 10)
+  </script>
+
+</body>
+</html>
