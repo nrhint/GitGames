@@ -1,171 +1,385 @@
 <!DOCTYPE html>
 <html>
-<head>
-  <meta charset="utf-8" />
-  <title>Sudoku</title>
-  <style>
-    * { padding: 0%; margin: 0; }
-    canvas { background: #eee; display: block; margin: 0 auto; }
-  </style>
-</head>
-<body>
-
-  <canvas id="myCanvas" width="480" height="480"></canvas>
-
-  <script>
-    var canvas = document.getElementById("myCanvas");
-    var ctx = canvas.getContext("2d");
-    ctx.font = "30px Arial";
-    //ctx.fillText("Hello World", 10, 50); example font
-    var cellSize = 50;
-    var lineWidth = 1;
-    var gridColor = 'blue';
-    var textColor = 'orange';
-    //    var output = 0;
-    var xPos = -1;
-    var yPos = -1;
-    var output = 0;
-
-    var numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9]
-
-    puzzle = []
-    for (x = 0; x<9; x++){
-	puzzle[x] = []
-	for (y = 0; y<9; y++){
-	    puzzle[x][y] = 0;
-	}
-    }
+  <head>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="style.css">
+    <script src="https://momentjs.com/downloads/moment.js"></script>
+    <title>Sudoku</title>
+    <style>
+      * { padding: 0%; margin: 0; }
+      canvas { background: #eee; display: block; margin: 0 auto; }
+    </style>
+  </head>
+  <body>
+    <div class="nav" style="margin: 1%;">
+      <a href = "../index.html">Home</a>
+    </div>
+    <div class="joke">
+      <h1>Do not get addicted!</h1>
+      <h1 id="showTime">Time: 0:00</h1>
+      <h1 id="showNote">Note mode: false</h1>
+    </div>
+    <div class="game">
+      <canvas id="myCanvas" width="480" height="480"></canvas>
+    </div>
+    <div class="slidecontainer">
+      <p>Change the difficulty</p>
+      <input type="range" min="10" max="80" value="30" class="slider" id="myRange">
+      <div id="diffucilityDisplay">
+	<p>30</p>
+      </div>
+    </div>
+    <div id = "instructions">
+      <p>
+	To play to click in an empty space and type in the number. To erase a space click it and enter 0, and to enable note mode press n. Right now each cell can only have one note. Make sure you are scrolled o the top of the page. If you do not know how to play Sudoku google it.
+      </p>
+    </div>
+    <a href="indexCutting.html"> cutting edge updates</a>
     
-    function choice(array) {
-	return Math.floor(Math.random() * array.length);
-    }
-    
-    function generatePuzzle(){
-	for (index = 0; index < 81; index++){
-	    x = index % 9;
-	    y = Math.floor(index/9);
-	    console.log(x, y);
-	    numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
-	    row = [];//get the items in the same row
-	    for (i = 0; i > 9; i ++) {
-		row.push(puzzle[i][y])
-	    }
-	    box = [];
-	    numbersToUse = []
-	    for (num in numbers) {
-		if (puzzle[x].includes(parseInt(num))) {//vertical check
-		    console.log(num);
-		} else if (row.includes(parseInt(num))) {
-		    console.log(num);
-		} else {
-		    numbersToUse.push(parseInt(num));
-		}
-	    }
-	    console.log(numbersToUse)
-	    c = choice(numbersToUse)
-	    puzzle[x][y] = numbersToUse[c]
-	}
-    }
-    
-    function gatherInput(){
-	if (xPos < 0 || xPos > 9 || yPos < 0 || yPos > 9) {
-	    console.log("Click out of range");
-	} else if (output == 0) {
-	    //pass
-	} else {
-	    console.log(xPos, yPos, output)
-	    puzzle[xPos][yPos] = output;
-	    xPos = -1;
-	    yPos = -1;
-	    output = 0;
-	    console.log("!!! PUZZLE CHANGED !!!");
-	}
-    }
-    
-    function keyPressed(event){
-	console.log("Pressed...")
-	output = 0;
-	if (event.key == '1'){
-	    output = 1;
-	}else if (event.key == '2') {
-	    output = 2;
-	}else if (event.key == '3') {
-	    output = 3;
-	}else if (event.key == '4') {
-	    output = 4;
-	}else if (event.key == '5') {
-	    output = 5;
-	}else if (event.key == '6') {
-	    output = 6;
-	}else if (event.key == '7') {
-	    output = 7;
-	}else if (event.key == '8') {
-	    output = 8;
-	}else if (event.key == '9') {
-	    output = 9;
-	}
-    }
-    
-    function mouseClicked(event){
-	x = event.clientX - canvas.offsetLeft;
-	y = event.clientY - canvas.offsetTop;
-	// I am cleaning up the x and y so that they start on the squares
-	x = x - ((canvas.width/2) - 4.5 * cellSize)
-	y = y - ((canvas.height/2) - 4.5 * cellSize)
-	//Here is where I condense the cords to a x, y cord on the puzzle
-	xPos = Math.floor((x / cellSize))
-	yPos = Math.floor((y / cellSize))
-	console.log(xPos, yPos);
-    }
+    <script>
+      var canvas = document.getElementById("myCanvas");
+      var ctx = canvas.getContext("2d");
+      ctx.font = "30px Arial";
+      var cellSize = 50;
+      var lineWidth = 1;
+      var gridColor = 'blue';
+      var textColor = 'orange';
+      var changedTextColor = 'red';
+      //    var output = 0;
+      var xPos = -1;
+      var yPos = -1;
+      var output = -1;
+      var slider = document.getElementById("myRange");
+      var diffucuilty = 25;//this is a percentage
+      var startTime = moment();
+      var note = false;//is this number a note?
+      
+      var numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+      
+      var box1 = [0, 1, 2, 9, 10, 11, 18, 19, 20];
+      var box2 = [3, 4, 5, 12, 13, 14, 21, 22, 23];
+      var box3 = [6, 7, 8, 15, 16, 17, 24, 25, 26];
+      
+      var box4 = [27, 28, 29, 36, 37, 38, 45, 46, 47];
+      var box5 = [30, 31, 32, 39, 40, 41, 48, 49, 50];
+      var box6 = [33, 34, 35, 42, 43, 44, 51, 52, 53];
+      
+      var box7 = [54, 55, 56, 63, 64, 65, 72, 73, 74];
+      var box8 = [57, 58, 59, 66, 67, 68, 75, 76, 77];
+      var box9 = [60, 61, 62, 69, 70, 71, 78, 79, 80];
+      
+      var puzzle = [];//This is the imutable part
+      var solvedPuzzle = [];//This is for what you have done
+      var testingPuzzle = [];//This is for testing the validity of the puzzle
+      
+      function choice(array) {
+	  return Math.floor(Math.random() * array.length);
+      }
+      
+      function randint(max) {
+	  return Math.floor(Math.random() * max);
+      }
+      
+      function generatePuzzle(){
+	  solvedPuzzle = []
+	  puzzle = []
+	  changablePuzzle = []
+	  testingPuzzle = []
+	  notes = []
+	  for (x = 0; x<9; x++){
+	      puzzle[x] = []
+	      notes[x] = []
+	      changablePuzzle[x] = []
+	      testingPuzzle[x] = []
+	      for (y = 0; y<9; y++){
+		  notes[x][y] = []
+		  puzzle[x][y] = 0;
+		  changablePuzzle[x][y] = 0;
+		  testingPuzzle[x][y] = 0;
+	      }
+	  }
+	  back = 0
+	  for (index = 0; index < 81; index++){
+	      x = index % 9;
+	      y = Math.floor(index/9);
+	      numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+	      row = [];//get the items in the same row
+	      for (i = 0; i < 9; i ++) {
+		  row.push(puzzle[i][y])
+	      }
+	      //	    console.log(row)
+	      box = []
+	      if (box1.includes(index)) {
+		  for (i=0; i < 9; i ++) {//loop through the box
+		      //		    console.log("box1");
+		      box.push(puzzle[box1[i]%9][Math.floor(box1[i]/9)]);
+		  }
+	      } else if (box2.includes(index)) {
+		  for (i=0; i < 9; i ++) {//loop through the box
+		      //		    console.log("box2");
+		      box.push(puzzle[box2[i]%9][Math.floor(box2[i]/9)]);
+		  }
+	      } else if (box3.includes(index)) {
+		  for (i=0; i < 9; i ++) {//loop through the box
+		      //		    console.log("box3");
+		      box.push(puzzle[box3[i]%9][Math.floor(box3[i]/9)]);
+		  }
+	      } else if (box4.includes(index)) {
+		  for (i=0; i < 9; i ++) {//loop through the box
+		      //		    console.log("box4");
+		      box.push(puzzle[box4[i]%9][Math.floor(box4[i]/9)]);
+		  }
+	      } else if (box5.includes(index)) {
+		  for (i=0; i < 9; i ++) {//loop through the box
+		      //		    console.log("box2");
+		      box.push(puzzle[box5[i]%9][Math.floor(box5[i]/9)]);
+		  }
+	      } else if (box6.includes(index)) {
+		  for (i=0; i < 9; i ++) {//loop through the box
+		      //		    console.log("box3");
+		      box.push(puzzle[box6[i]%9][Math.floor(box6[i]/9)]);
+		  }
+	      } else if (box7.includes(index)) {
+		  for (i=0; i < 9; i ++) {//loop through the box
+		      //		    console.log("box4");
+		      box.push(puzzle[box7[i]%9][Math.floor(box7[i]/9)]);
+		  }
+	      } else if (box8.includes(index)) {
+		  for (i=0; i < 9; i ++) {//loop through the box
+		      //		    console.log("box2");
+		      box.push(puzzle[box8[i]%9][Math.floor(box8[i]/9)]);
+		  }
+	      } else if (box9.includes(index)) {
+		  for (i=0; i < 9; i ++) {//loop through the box
+		      //		    console.log("box3");
+		      box.push(puzzle[box9[i]%9][Math.floor(box9[i]/9)]);
+		  }
+	      }
+	      numbersToUse = []
+	      for (num in numbers) {
+		  if (puzzle[x].includes(parseInt(num))) {//vertical check
+		      //		    console.log(num);
+		  } else if (row.includes(parseInt(num))) {
+		      //		    console.log(num);
+		  } else if (box.includes(parseInt(num))) {//if you are in the box
+		      //pass
+		  } else {
+		      numbersToUse.push(parseInt(num));
+		  }
+	      }
+	      if (numbersToUse.length == []) {
+		  if (index < 0 || back > 1000) {
+		      index = 0;
+//		      console.log("INDEX IS 0 or you backtracked too many times.");
+//		      console.log(numbersToUse);
+		      generatePuzzle()
+		      return false;
+		  }
+//		  console.log("moving back, index was " + index + " New index is " + y*9);
+		  index = y*9;
+		  back ++;
+		  for (i=1; i < 9; i ++) {
+		      puzzle[i][y] = 0;
+		  }
+	      } else {
+		  c = choice(numbersToUse);
+		  puzzle[x][y] = numbersToUse[c];
+	      }
+	  }
+	  solvedPuzzle = []
+	  //remove numbers randomly
+	  for (x=0; x < 9; x++) {
+	      solvedPuzzle[x] = []
+	      for (y=0; y < 9; y++) {
+		  solvedPuzzle[x][y] = puzzle[x][y]
+		  if (randint(100)<diffucuilty) {
+		      puzzle[x][y] = 0
+		  }
+	      }
+  }
+	  timer = 0;
+	  
+      }
+      
+      function gatherInput(){
+	  if (xPos < 0 || xPos > 9 || yPos < 0 || yPos > 9) {
+	      //console.log("Click out of range");
+	  } else if (output == -1) {
+	      //pass
+	  } else {
+	      console.log(xPos, yPos, output)
+	      if (note == true){
+		  if (output == 0) {
+		      notes[xPos][yPos] = [];
+		  } else {
+		      notes[xPos][yPos].push(output);
+		  }
+	      } else{
+		  changablePuzzle[xPos][yPos] = output;
+	      }
+	      xPos = -1;
+	      yPos = -1;
+	      output = -1;
+	      console.log("!!! PUZZLE CHANGED !!!");
+	  }
+      }
+      
+      function keyPressed(event){
+	  console.log("Pressed...")
+	  output = -1;
+	  if (event.key == '1'){
+	      output = 1;
+	  }else if (event.key == '2') {
+	      output = 2;
+	  }else if (event.key == '3') {
+	      output = 3;
+	  }else if (event.key == '4') {
+	      output = 4;
+	  }else if (event.key == '5') {
+	      output = 5;
+	  }else if (event.key == '6') {
+	      output = 6;
+	  }else if (event.key == '7') {
+	      output = 7;
+	  }else if (event.key == '8') {
+	      output = 8;
+	  }else if (event.key == '9') {
+	      output = 9;
+	  }else if (event.key == 'n') {
+	      note = !note;//This will invert the note input
+	      console.log(note);
+	      document.getElementById("showNote").innerHTML = "Note mode: "+note
+	  }else if (event.key == '0') { //This will allow a cell to be erased.
+	      output = 0;
+	  }
+      }
+      
+      function mouseClicked(event){
+	  var parentPosition = getPosition(event.currentTarget);
+	  x = event.clientX - parentPosition.x;
+	  y = event.clientY - parentPosition.y;
+	  console.log(x, y);
+	  x = x - ((canvas.width/2) - 4.5 * cellSize) //+(cellSize/2)
+	  y = y - ((canvas.height/2) - 4.5 * cellSize) //+(cellSize/2)
+	  xPos = Math.floor((x / cellSize))
+	  yPos = Math.floor((y / cellSize))
+	  console.log(xPos, yPos);
+      }
 
+      function getPosition(el) {
+	  var xPos = 0;
+	  var yPos = 0;
+	  while (el) {
+	      if (el.tagName == "BODY") {
+		  // deal with browser quirks with body/window/document and page scroll
+		  var xScroll = el.scrollLeft || document.documentElement.scrollLeft;
+		  var yScroll = el.scrollTop || document.documentElement.scrollTop;
+		  xPos += (el.offsetLeft - xScroll + el.clientLeft);
+		  yPos += (el.offsetTop - yScroll + el.clientTop);
+	      } else {
+		  // for all other non-BODY elements
+		  xPos += (el.offsetLeft - el.scrollLeft + el.clientLeft);
+		  yPos += (el.offsetTop - el.scrollTop + el.clientTop);
+	      }
+	      el = el.offsetParent;
+	  }
+	  return {
+	      x: xPos,
+	      y: yPos
+	  };
+      }
+      
+      function drawGrid(){
+	  for (x = 0; x<10; x++){//make a set of 10 vertical lines in the center of the screen
+	      //console.log(x);
+	      if (x%3 == 0){
+		  lineWidth = 3;
+		  //console.log("Thick")
+	      }else{
+		  lineWidth = 1;
+	      }
+	      ctx.beginPath();
+	      //	    console.log(((canvas.width/2) - 4.5*cellSize) + x*cellSize)
+	      ctx.rect(((canvas.width/2) - 4.5*cellSize) + x*cellSize, ((canvas.height/2) - 4.5*cellSize), lineWidth, cellSize*9);
+	      ctx.fillStyle = gridColor;
+	      ctx.fill();
+	      ctx.closePath();
+	      //draw the horz lines
+	      ctx.beginPath();
+	      ctx.rect(((canvas.width/2) - 4.5*cellSize), ((canvas.height/2) - 4.5*cellSize) + x*cellSize, cellSize*9+3, lineWidth);
+	      ctx.fillStyle = gridColor;
+	      ctx.fill();
+	      ctx.closePath();
+	  }
+      }
+      
+      function drawPuzzle() {
+	  for (rowIndex = 0; rowIndex < puzzle.length; rowIndex++){
+	      for (colIndex = 0; colIndex < puzzle[rowIndex].length; colIndex++){
+		  if (puzzle[rowIndex][colIndex] != 0) {
+		      testingPuzzle[rowIndex][colIndex] = puzzle[rowIndex][colIndex];
+		      ctx.font = "30px Arial";
+		      ctx.fillStyle = textColor
+		      ctx.fillText(puzzle[rowIndex][colIndex], ((canvas.width/2) - 4.5*cellSize)+cellSize*rowIndex+(cellSize/3), ((canvas.height/2) - 4.5*cellSize)+colIndex*cellSize+(cellSize/1.25));
+		  } else if (changablePuzzle[rowIndex][colIndex] != 0) {
+		      ctx.font = "30px Arial";
+		      testingPuzzle[rowIndex][colIndex] = changablePuzzle[rowIndex][colIndex];
+		      ctx.fillStyle = changedTextColor
+		      ctx.fillText(changablePuzzle[rowIndex][colIndex], ((canvas.width/2) - 4.5*cellSize)+cellSize*rowIndex+(cellSize/3), ((canvas.height/2) - 4.5*cellSize)+colIndex*cellSize+(cellSize/1.25));
+		  } else if (notes[rowIndex][colIndex].length != 0) {
+		      ctx.font = "10px Arial";
+		      ctx.fillStyle = changedTextColor
+		      ctx.fillText(notes[rowIndex][colIndex], ((canvas.width/2) - 4.5*cellSize)+cellSize*rowIndex+(cellSize/3), ((canvas.height/2) - 4.5*cellSize)+colIndex*cellSize+(cellSize/1.25));
+		  }
+	      }
+	  }
+      }
 
-    
-    function drawGrid(){
-	for (x = 0; x<10; x++){//make a set of 10 vertical lines in the center of the screen
-	    //console.log(x);
-	    if (x%3 == 0){
-		lineWidth = 3;
-		//console.log("Thick")
-	    }else{
-		lineWidth = 1;
-	    }
-	    ctx.beginPath();
-//	    console.log(((canvas.width/2) - 4.5*cellSize) + x*cellSize)
-	    ctx.rect(((canvas.width/2) - 4.5*cellSize) + x*cellSize, ((canvas.height/2) - 4.5*cellSize), lineWidth, cellSize*9);
-	    ctx.fillStyle = gridColor;
-	    ctx.fill();
-	    ctx.closePath();
-	    //draw the horz lines
-	    ctx.beginPath();
-	    ctx.rect(((canvas.width/2) - 4.5*cellSize), ((canvas.height/2) - 4.5*cellSize) + x*cellSize, cellSize*9+3, lineWidth);
-	    ctx.fillStyle = gridColor;
-	    ctx.fill();
-	    ctx.closePath();
-	}
-    }
+      function time() {
+	  
+	  document.getElementById("showTime").innerHTML = moment().subtract(startTime).format('[Time:] m:ss');
+      }
 
-    function drawPuzzle() {
-	for (rowIndex = 0; rowIndex < puzzle.length; rowIndex++){
-	    for (colIndex = 0; colIndex < puzzle[rowIndex].length; colIndex++){
-		if (puzzle[rowIndex][colIndex] != 0) {
-		    ctx.fillColor = textColor
-		    ctx.fillText(puzzle[rowIndex][colIndex], ((canvas.width/2) - 4.5*cellSize)+cellSize*rowIndex+(cellSize/3), ((canvas.height/2) - 4.5*cellSize)+colIndex*cellSize+(cellSize/1.25));
-		}
-	    }
-	}
-    }
-    function draw() {
-	ctx.clearRect(0, 0, canvas.width, canvas.height);
-	drawGrid();
-	gatherInput();
-	drawPuzzle();
-    }
-    canvas.addEventListener("click", mouseClicked, false);
-    document.addEventListener('keydown', keyPressed, false);
-
-    generatePuzzle();
-    interval = setInterval(draw, 100)
-  </script>
-
-</body>
+      function showTime() {
+	  min = Math.floor(timer/60);
+	  sec = timer%60;
+	  window.alert("You took "+moment().subtract(startTime).format('[Time:] m:ss'));
+      }
+      
+      function draw() {
+	  done = true
+	  for (x=0; x<9; x++) {
+	      for (y=0; y<9; y++) {
+		  if (testingPuzzle[x][y] != solvedPuzzle[x][y]) {
+		      done = false
+		  }
+	      }
+	  }
+	  if (done == true) {
+	      window.alert("You solved the puzzle!");
+	      clearInterval(interval);
+	      clearInterval(timeTracker);
+	      showTime();
+	      return true
+	  }	
+	  ctx.clearRect(0, 0, canvas.width, canvas.height);
+	  drawGrid();
+	  gatherInput();
+	  drawPuzzle();
+      }
+      canvas.addEventListener("click", mouseClicked, false);
+      document.addEventListener('keydown', keyPressed, false);
+      slider.oninput = function() {
+	  if (diffucuilty != Math.round(this.value/10)*10) {
+	      diffucuilty = Math.round(this.value/10)*10;
+	      document.getElementById("diffucilityDisplay").innerHTML = diffucuilty;
+//	  console.log(diffucuilty);
+	      generatePuzzle();
+	  }
+      }
+      generatePuzzle();
+      interval = setInterval(draw, 100);
+      timeTracker = setInterval(time, 1000);
+    </script>
+  </body>
 </html>

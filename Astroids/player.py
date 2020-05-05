@@ -42,6 +42,8 @@ class Player:
         self.y+= -(cos(radians(self.heading)))* self.speed
         self.x+= -(sin(radians(self.heading)))* self.speed
     def update(self):
+        self.oldRect = self.rect
         self.rect = pygame.Rect((self.x%self.display.get_width()-2, self.y%self.display.get_height()-2), (18, 18))
-        self.display.blit(pygame.transform.rotate(self.img, self.heading), (self.x%self.display.get_width(), self.y%self.display.get_height()))
+        return self.rect
+        #self.display.blit(pygame.transform.rotate(self.img, self.heading), (self.x%self.display.get_width(), self.y%self.display.get_height()))
 #        pygame.draw.rect(self.display, (0, 255, 0), self.rect)

@@ -1,12 +1,15 @@
 ##Nathan Hinton
 ##This is the main file for astroids
 
+##Imporoving fps old was 450 avg with varriances in playing
+##New is:
+
 #Vars:
 width, height = 600, 600
-fps = 15
+fps = 60
 startAstroids = 4
-maxAstroids = 20
-spawnChance = 1#percent
+maxAstroids = 4
+spawnChance = 100#percent
 
 ##Setup window:
 import pygame
@@ -24,6 +27,7 @@ pygame.display.set_caption('Astro')
 background = pygame.Surface(screen.get_size())
 background = background.convert()
 background.fill((0, 0, 0))
+bg = pygame.Rect((0, 0), screen.get_size())
 
 
 #Setup objects:
@@ -40,13 +44,14 @@ for x in range(startAstroids):
 
 #benchmarking:
 start = time()
+times = []
 ##Main Loop:
 loop = True
 count = 0#This is for making sure that the player has been hit for 2 frames
 frameCount = 0
 while loop == True:
-    pygame.display.flip()
-    screen.blit(background, (0, 0))
+    nextStep = time()#+(1/fps)#Dissable fps tracking
+    dirtyRects = [bg]
     #Get keypresses here
     keysPressed = pygame.key.get_pressed()
     keys = []
@@ -69,9 +74,10 @@ while loop == True:
     if pygame.Rect.collidelist(player.rect, astRects) != -1:
         count += 1
         if count > 3:
-            loop = False
-            print("player died")
-            print("score:", score)
+            #loop = False # dissable death
+            #print("player died")
+            #print("score:", score)
+            pass
     player.run(keys)
     for bullet in bullets:
         if pygame.Rect.collidelist(bullet.rect, astRects) != -1:
@@ -100,18 +106,25 @@ while loop == True:
         if len(astroids) < maxAstroids:
             astroids.append(Astroid(screen))
 
-    ##Update Graphics:
-    player.update()
+     ##Update Graphics:
+    screen.blit(background, (0, 0))
+    k=player.update()
     for bullet in bullets:
-        bullet.update()
+        dirtyRects.append(bullet.update())
     for astroid in astroids:
-        astroid.update()
+        dirtyRects.append(astroid.update())
+    pygame.display.update([k, player.oldRect])
     frameCount += 1
-    sleep(1/fps)
+    times.append(nextStep-time())
+    try:
+        if nextStep > time():
+            sleep(nextStep-time())
+    except ValueError:
+        pass
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
-            pygame.quit()
             loop = False #End the main loop
 
+pygame.quit()
 end = time()
 print("Avg fps was: %s"%(frameCount/(end-start)))
