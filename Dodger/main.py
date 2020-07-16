@@ -6,6 +6,7 @@ import pygame
 from time import sleep, time
 from player import *
 from badGuys import *
+from bullet import *
 from random import randint
 
 totalStart = time()
@@ -31,6 +32,8 @@ myfont = pygame.font.SysFont('Comic Sans MS', 30)
 ##Setup the player
 player = Player(screen, 'player.png')
 
+bullets = []
+bulletCounter = 0
 ##Add the bad guys:
 badGuys = []
 level = 1
@@ -53,9 +56,15 @@ while run == True:
         level += 1
         maxBads = level*5
         speed = level
+    ##Shoot bullets:
+    bulletCounter += 1
+    if pygame.mouse.get_pressed() == (1, 0, 0) and len(bullets) <11 and bulletCounter > 10:
+        bullets.append(Bullet(screen, 'bullet.png', (player.x, player.y), speed))
+        bulletCounter = 0
+    
     ##Add badGuys when needed:
     timeSinceLastAdd += 1
-    if len(badGuys) < maxBads and timeSinceLastAdd> (spaceBetweenbads/level) :
+    if len(badGuys) < maxBads and timeSinceLastAdd> (spaceBetweenbads/level):
         badGuys.append(BadGuy(screen, 'badGuy.png', speed = speed))
         timeSinceLastAdd = 0
     ##Do all the thinking:
@@ -66,6 +75,15 @@ while run == True:
         if obj.y > height:
             badGuys.pop(badGuys.index(obj))
             score += 1
+    for bullet in bullets:
+        bullet.run()
+        hit = pygame.Rect.collidelist(bullet.rect, badGuyRects)
+        if hit != -1:
+            badGuys.pop(hit)
+            bullets.pop(bullets.index(bullet))
+            score += 1.5
+        if bullet.y < 0:
+            bullets.pop(bullets.index(bullet))
     player.run()
     ##Draw all of the stuff
     screen.blit(background, (0, 0))
@@ -74,6 +92,8 @@ while run == True:
     levelSurface = myfont.render('Level: %s'%level, False, (0, 0, 0))
     screen.blit(scoreSurface,(0,0))
     screen.blit(levelSurface,(0,20))
+    for bullet in bullets:
+        bullet.update()
     for obj in badGuys:
         obj.update()
     player.update()

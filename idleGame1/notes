@@ -1,0 +1,11 @@
+Nathan hinton
+This is the file where I will keep release version and information. I will also put current goals and projects
+
+V1:
+  Still working on the basic game
+
+
+V2:
+  Goals:
+    Make the game event driven, maybe make an event class that will manage that
+    Make it so that the game is driven my time vs while it is active.

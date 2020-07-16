@@ -1,0 +1,148 @@
+<html>
+  <head>
+    <title>Connect</title>
+    <link rel='stylesheet' href='style.css'>
+      <style>
+	* { padding: 0%; margin: 0; }
+	canvas { background: #126534; display: block; margin: 0 auto; }
+      </style>
+  </head>
+  <body>
+    <div id='nav'>
+      <a href='../index.html'>home</a>
+    </div>
+    <div class='game'>
+	<canvas id="myCanvas" width="480" height="480"></canvas>
+    </div>
+  </body>
+  <script>
+    var canvas = document.getElementById("myCanvas");
+    var ctx = canvas.getContext("2d");
+    var startMouse = [0, 0];
+    var endMouse = [0, 0];
+    mouseX = 0;
+    mouseY = 0;
+    isMouseClicked = false;
+    line = undefined;
+
+    var level1 = [{x: 200, y: 200, owner: true, value: 10}, {x: 300, y: 300, owner: 'player', value: 20}, { x: 300, y: 200, owner: false, value: 10}];
+
+    var level = level1
+
+    //get the mouse position
+    function getPosition(el) {
+	var xPos = 0;
+	var yPos = 0;
+	while (el) {
+	    if (el.tagName == "BODY") {
+		// deal with browser quirks with body/window/document and page scroll
+		var xScroll = el.scrollLeft || document.documentElement.scrollLeft;
+		var yScroll = el.scrollTop || document.documentElement.scrollTop;
+		xPos += (el.offsetLeft - xScroll + el.clientLeft);
+		yPos += (el.offsetTop - yScroll + el.clientTop);
+	    } else {
+		// for all other non-BODY elements
+		xPos += (el.offsetLeft - el.scrollLeft + el.clientLeft);
+		yPos += (el.offsetTop - el.scrollTop + el.clientTop);
+	    }
+	    el = el.offsetParent;
+	}
+	return {
+	    x: xPos,
+	    y: yPos
+	};
+    }
+    //get when the mouse is clicked
+    function mouseDown(event){
+	//console.log("Mouse down");
+	//var parentPosition = getPosition(event.currentTarget);
+	x = event.clientX// - parentPosition.x;
+	y = event.clientY// - parentPosition.y;
+	mouseX = x;
+	mouseY = y;
+	startMouse = [mouseX, mouseY];
+	console.log(startMouse);
+    }
+
+    function mouseUp(event) {
+	//console.log("Mouse up");
+	//var parentPosition = getPosition(event.currentTarget);
+	x = event.clientX// - parentPosition.x;
+	y = event.clientY// - parentPosition.y;
+	mouseX = x;
+	mouseY = y;
+	endMouse = [mouseX, mouseY];
+	console.log(endMouse)
+    }
+    
+    function gatherInput(){
+	change = true;
+	for (index = 0; index < 2; index ++){
+	    if (startMouse[index] == endMouse[index] || endMouse[index] == 0) {
+		change = false;
+	    }
+	}
+	if (change == true) {
+	    console.log('drawingLine')
+	    line = {start: [startMouse[0], startMouse[1]], end: [endMouse[0]-startMouse[0], startMouse[1]-endMouse[1]]};
+	    ctx.beginPath();
+	    ctx.moveTo(startMouse[0], startMouse[1]);
+	    ctx.lineTo(endMouse[0]-startMouse[0], startMouse[1]-endMouse[1]);
+	    ctx.stroke();
+	    startMouse = [0, 0];
+	    endMouse = [0, 0];
+	}
+    }
+
+    function drawLine() {
+	if (line != undefined) {
+	    ctx.beginPath();
+	    ctx.moveTo(line.start[0], line.start[1]);
+	    ctx.lineTo(line.end[0], line.end[1]);
+	    ctx.stroke();
+	}
+    }
+    
+    function drawNode(node) {
+	if (node.owner == false) {
+	    color = "#aaaaaa";
+	}else if (node.owner == 'player') {
+	    color = "#00ff00";
+	}else {
+	    color = "#ff0000";
+	}
+	//set the size of the node
+	nodeLevel = 1;
+	if (node.value > 300){
+	    nodeLevel = 3;
+	    nodeSize = 15;
+	} else if (node.value > 100) {
+	    nodeLevel = 2;
+	    nodeSize = node.value/20;
+	} else {
+	    nodeSize = 5;
+	}
+	node.value += nodeLevel
+	ctx.beginPath();
+	ctx.arc(node.x, node.y, nodeSize, 0, Math.PI*2);
+	ctx.fillStyle = color;
+	ctx.fill();
+	ctx.closePath();
+    }
+
+    function draw() {
+//	console.log('drawing...');
+	ctx.clearRect(0, 0, canvas.width, canvas.height);
+	for (var node in level) {
+	    drawNode(level[node]);
+	}
+	//	requestAnimationFrame(draw);
+	gatherInput();
+	drawLine();
+    }
+    canvas.addEventListener("mousedown", mouseDown, false);
+    window.addEventListener("mouseup", mouseUp, false);
+
+    interval = setInterval(draw, 25);
+  </script>
+</html>

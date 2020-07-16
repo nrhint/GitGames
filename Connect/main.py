@@ -1,21 +1,22 @@
 ##Nathan Hinton
-##This is a template
+##This is for the connect game
 
 from time import time, sleep
 
 programStart = time()
 
 import pygame
-#import local files here:
+from node import *
 
 ##Vars that you can change:
 fps = 60 #This will dirrectly change the hardness of the game.
 step = 1/fps #Using time to delay if needed
 width, height = 800, 600
+spaceBetweenbads = fps
 
 pygame.init()
 screen = pygame.display.set_mode((width, height))
-pygame.display.set_caption("NAME")
+pygame.display.set_caption("CONNECT")
 
 background = pygame.Surface(screen.get_size())
 background = background.convert()
@@ -27,6 +28,8 @@ background.fill((0, 0, 255))
 
 gameStart = time()
 
+##For testing:
+nodes = [Node(screen, 'human', (int(width/2), int(height/2)))]
 
 run = True
 frameCount = 0
@@ -34,12 +37,16 @@ idle = 0
 while run == True:
     nextStep = time()+step
     ##Logic:
-
+    for node in nodes:
+        node.run()
     ##Update Screen:
     screen.blit(background, (0, 0))
-    if time()<nextStep:
-        sleep(time()-nextStep)
+    for node in nodes:
+        node.update()
+    pygame.display.flip()
     frameCount += 1
+    if time()<nextStep:
+        sleep(nextStep-time())
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             pygame.quit()

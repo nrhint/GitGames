@@ -12,7 +12,6 @@ from simon import *
 fps = 60 #This will dirrectly change the hardness of the game.
 step = 1/fps #Using time to delay if needed
 width, height = 600, 600
-spaceBetweenbads = fps
 
 pygame.init()
 screen = pygame.display.set_mode((width, height))
@@ -36,6 +35,7 @@ simon = Simon(screen)
 run = True
 frameCount = 0
 idle = 0
+sleep(1)
 while run == True:
     nextStep = time()+step
     ##Logic:
@@ -48,8 +48,10 @@ while run == True:
     simon.update()
     pygame.display.flip()
     ##Sleep if needed
-    while time()<nextStep:
-        idle += 1
+    if nextStep - time() > 0:
+        sleep(nextStep - time())
+##    while time()<nextStep:
+##        idle += 1
     frameCount += 1
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -80,5 +82,10 @@ pygame.display.flip()
 end = time()
 print("The time taken to load was %s seconds"%(gameStart-programStart))
 print("The avg fps was %sfps"%(frameCount/(end-gameStart)))
-sleep(10)
+showScore = True
+while showScore:
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            pygame.quit()
+            showScore = False #End the main loop
 pygame.quit()

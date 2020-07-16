@@ -1,0 +1,28 @@
+Nathan Hinton
+This is a sample of how the file is organized
+
+var -> Used by class/in file
+
+Vars:
+moneyList -> main.py
+duplicatChance -> main.py
+maxMoneyCount -> main.py
+minMoneyValue -> main.py
+maxMoneyValue -> Money
+timeoutGainPercent -> main.py
+playerMoney -> main.py
+minMoneyExpire Money
+maxMoneyExpire -> Money
+
+
+Here is a list of what each file and class does.
+
+menu.py:
+  StartMenu:
+    Used for loading all the data from a file and passing it to the main program which will distribute as needed.
+  UpgradeMenu:
+    Used to display a list of upgrades and allows the player to increase things
+  InputBox:
+    Used to create a textual input box
+  Button:
+    Used to create a clickable button
