@@ -34,8 +34,7 @@ class Astroid:
         self.x+= -(sin(radians(self.heading)))* self.speed
     def update(self):
         self.rect = pygame.Rect((self.x%self.display.get_width()-3, self.y%self.display.get_height()-3), (self.size-3, self.size-3))
-        return self.rect
-        #self.display.blit(self.img, (self.x%self.display.get_width(), self.y%self.display.get_height()))
+        self.display.blit(self.img, (self.x%self.display.get_width(), self.y%self.display.get_height()))
 #        pygame.draw.rect(self.display, (255, 0, 0), self.rect)
     def hit(self):
         self.delete = True

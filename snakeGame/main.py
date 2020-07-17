@@ -69,11 +69,23 @@ class AISnake(Snake):
         for z in range(startLength):
             self.positions.append([x, y+z])
         self.direction = 'up'
+        self.screenWidth = 20
+        self.screenHeight = 20
+        self.target = [0, 0]
         self.draw()
 
     def logic(self):
-        self.target = apple.position
         self.pos = self.positions[0]
+        #print(self.pos == self.target)
+        if self.pos == self.target:#move to the next position
+            if self.target == [19, 18]:
+                self.target = [19, 19]
+            elif self.pos == [19, 19]:
+                self.target = [0, 19]
+            elif self.pos == [0, 19]:
+                self.target = [0, 0]
+            else:
+                self.target = [self.target[0]+1, (self.target[1]+18)%36]
         #Get the left/right:
         if self.pos[0]-self.target[0] > 0:
             self.direction = 'left'
@@ -163,16 +175,23 @@ while loop == True:
 
         apple.run()
         if gameType != 'dynamic':
+            pass
             play.append(eric.run(direction2))#Returns True of not out of screen or not hitting self
             play.append(nathan.run(direction))
         else:#The game type is dynamic
             AI.run(AI.logic())
             if AI.die == True:
-                x += 1
-                total += len(AI.positions)
-                print(len(AI.positions))
-                avg = total/x
-                AI.__init__(color = AI.color)
+                if x > 99:
+                    play = [False]
+                    loop = False
+                else:
+                    print(AI.pos)
+                    #sleep(1)
+                    x += 1
+                    total += len(AI.positions)
+                    print(len(AI.positions))
+                    avg = total/x
+                    AI.__init__(color = AI.color)
 
             eric.run(direction)
             nathan.run(direction2)

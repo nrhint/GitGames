@@ -1,0 +1,35 @@
+##Nathan hinton
+##This is the history file for the ai created for snake
+
+REV 1.0
+
+Stats:
+avg length over 100 runs: 12.98
+
+class AISnake(Snake):
+    def __init__(self, x=10, y=10, startLength=4, color='green'):
+        self.color = color
+        self.die = False
+        self.img = pygame.image.load('%s.png'%color)
+        self.positions = []
+        for z in range(startLength):
+            self.positions.append([x, y+z])
+        self.direction = 'up'
+        self.draw()
+
+    def logic(self):
+        self.target = apple.position
+        self.pos = self.positions[0]
+        #Get the left/right:
+        if self.pos[0]-self.target[0] > 0:
+            self.direction = 'left'
+        elif self.pos[0]-self.target[0] < 0:
+            self.direction = 'right'
+        else:
+            if self.pos[1]-self.target[1] > 0:
+                self.direction = 'up'
+            else:
+                self.direction = 'down'
+        #print(self.target)
+        return self.direction
+----------------------------------------------------------------------------

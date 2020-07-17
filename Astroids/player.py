@@ -4,7 +4,8 @@
 ##Vars you can change
 acceleration = 1
 maxSpeed = 10
-turnRate = 5
+turnRate = 3.5
+
 
 #Setup:
 import pygame
@@ -23,7 +24,6 @@ class Player:
         self.img = pygame.image.load('player.png')#load player image
         self.speed = 0
         self.heading = 0
-        self.bullets = []
         self.rect = pygame.Rect((self.x+10, self.y+10), (self.x-10, self.y-10))
     def run(self, keys):
         if 'up' in keys:
@@ -44,6 +44,5 @@ class Player:
     def update(self):
         self.oldRect = self.rect
         self.rect = pygame.Rect((self.x%self.display.get_width()-2, self.y%self.display.get_height()-2), (18, 18))
-        return self.rect
-        #self.display.blit(pygame.transform.rotate(self.img, self.heading), (self.x%self.display.get_width(), self.y%self.display.get_height()))
+        self.display.blit(pygame.transform.rotate(self.img, self.heading), (self.x%self.display.get_width(), self.y%self.display.get_height()))
 #        pygame.draw.rect(self.display, (0, 255, 0), self.rect)

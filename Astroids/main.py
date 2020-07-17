@@ -1,8 +1,6 @@
 ##Nathan Hinton
 ##This is the main file for astroids
 
-##Imporoving fps old was 450 avg with varriances in playing
-##New is:
 
 #Vars:
 width, height = 600, 600
@@ -50,7 +48,7 @@ loop = True
 count = 0#This is for making sure that the player has been hit for 2 frames
 frameCount = 0
 while loop == True:
-    nextStep = time()#+(1/fps)#Dissable fps tracking
+    nextStep = time()+(1/fps)
     dirtyRects = [bg]
     #Get keypresses here
     keysPressed = pygame.key.get_pressed()
@@ -74,9 +72,9 @@ while loop == True:
     if pygame.Rect.collidelist(player.rect, astRects) != -1:
         count += 1
         if count > 3:
-            #loop = False # dissable death
-            #print("player died")
-            #print("score:", score)
+            loop = False # set to true to dissable death
+            print("player died")
+            print("score:", score)
             pass
     player.run(keys)
     for bullet in bullets:
@@ -86,8 +84,7 @@ while loop == True:
             bullet.delete = True
         bullet.run()
         if bullet.delete == True:
-            del bullet
-            bullets.pop(0)
+            bullets.pop(bullets.index(bullet))        
     for astroid in astroids:
         astroid.run()
         if astroid.delete == True:
@@ -110,9 +107,11 @@ while loop == True:
     screen.blit(background, (0, 0))
     k=player.update()
     for bullet in bullets:
-        dirtyRects.append(bullet.update())
+        bullet.update()
     for astroid in astroids:
-        dirtyRects.append(astroid.update())
+        astroid.update()
+    for rect in dirtyRects:
+        pygame.display.update(rect)
     pygame.display.update([k, player.oldRect])
     frameCount += 1
     times.append(nextStep-time())

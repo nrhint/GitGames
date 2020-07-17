@@ -33,6 +33,5 @@ class Bullet:
             self.x+= -(sin(radians(self.heading)))* self.speed
     def update(self):
         self.rect = pygame.Rect((self.x%self.display.get_width()+9, self.y%self.display.get_height()+9), (self.size, self.size))
-        return self.rect
-        #self.display.blit(self.img, (self.x%self.display.get_width(), self.y%self.display.get_height()))
+        self.display.blit(self.img, (self.x%self.display.get_width(), self.y%self.display.get_height()))
 #        pygame.draw.rect(self.display, (0, 0, 255), self.rect)

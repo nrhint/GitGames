@@ -5,7 +5,7 @@
 
 #Setup Vars:
 
-(widths, heights) = (30, 30)
+(widths, heights) = (10, 10)
 size = 20
 BLACK = (0, 0, 0)
 score = 0
@@ -56,7 +56,7 @@ class Chip:
         for chip in chips:
             if chip.x == self.x:
                 if chip.y == self.y+1:
-                    #self.update()
+                    self.update()
                     fall = False
         if fall == True:
             self.y += 1
@@ -139,11 +139,12 @@ def getNextTo(chips, pos):
 running = True
 count = 0
 while running:
-    #sleep(1)
-    pygame.display.flip()
+##    sleep(1)
+##    print("looped")
     screen.fill(background_color)
     for chip in allChips:
         chip.draw(allChips)
+    pygame.display.flip()
     for event in pygame.event.get():
         if event.type == pygame.MOUSEBUTTONUP:
             changing = True
