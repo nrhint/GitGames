@@ -80,9 +80,10 @@ while run == True:
         hit = pygame.Rect.collidelist(bullet.rect, badGuyRects)
         if hit != -1:
             badGuys.pop(hit)
+            badGuyRects.pop(hit)
             bullets.pop(bullets.index(bullet))
             score += 1.5
-        if bullet.y < 0:
+        elif bullet.y < 0:
             bullets.pop(bullets.index(bullet))
     player.run()
     ##Draw all of the stuff

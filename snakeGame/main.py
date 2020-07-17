@@ -38,11 +38,11 @@ class Snake():
         self.draw()
         self.x, self.y = self.positions[0]
         #print(self.x, self.y)
-        if 0>self.x or self.x>19:
+        if 0>self.x or self.x>(screen.get_width()/20)-1:
             print("%s OUT OF SCREEN X"%self.color)
             self.die = True
             return False#End the main loop
-        if 0>self.y or self.y>19:
+        if 0>self.y or self.y>(screen.get_height()/20)-1:
             print("%s OUT OF SCREEN Y"%self.color)
             self.die = True
             return False#End the main loop
@@ -102,13 +102,14 @@ class AISnake(Snake):
 class Apple():
     def __init__(self):
         self.img = pygame.image.load('apple.png')
-        self.position = [randNum(0, 19), randNum(0, 19)]
+        self.position = [randNum(0, screen.get_width()/20-1), randNum(0, screen.get_height()/20-1)]
         self.draw()
     def run(self):
         self.draw()
         #self.position = (randNum(0, 20), randNum(0, 20))
     def move(self):
-        self.position = [randNum(0, 19), randNum(0, 19)]
+        self.position = [randNum(0, screen.get_width()/20-1), randNum(0, screen.get_height()/20-1)]
+        print(self.position)
     def draw(self):
         screen.blit(self.img, (self.position[0]*20, self.position[1]*20))
         
@@ -116,7 +117,7 @@ class Apple():
 ##Initalize pygame
 
 pygame.init()
-screen = pygame.display.set_mode((400, 400))#Width and height
+screen = pygame.display.set_mode((800, 600))#Width and height
 pygame.display.set_caption('Snake')
 
 background = pygame.Surface(screen.get_size())
