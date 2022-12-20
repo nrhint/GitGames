@@ -1,6 +1,6 @@
 ##Nathan Hinton
 
-from pygame import Rect
+from pygame import Rect, draw
 
 class Brick:
     def __init__(self, x, y, width, height, value):
@@ -11,8 +11,8 @@ class Brick:
         self.rect = Rect(x, y, width, height)
         self.value = value
     
-    def draw(self):
-        pass
+    def draw(self, screen):
+        draw.rect(screen, (150, 150, 150), self.rect)
 
     def damage(self, value):
         self.value -= value
