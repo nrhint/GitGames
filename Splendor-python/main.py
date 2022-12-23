@@ -43,7 +43,7 @@ Tokens, 1x5
 ##Place the nobles:
 
 ##Place the cards:
-for i in range(0, 1):
+for i in range(2, 0):
     print("Adding level %s cards to layout" %(i+1))
     ##Add the draw card:
     tmp = Card(screen, i, remainingCards, cards, True)
@@ -63,8 +63,8 @@ while run == True:
     nextStep = time()+step
 
     ##Apply updates to the screen:
-    cards.update()
     screen.blit(background, (0, 0))
+    cards.update(screen)
     pygame.display.flip()
 
     ##Prepare for next frame

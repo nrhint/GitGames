@@ -28,3 +28,4 @@ with open("cards.yaml", 'r') as yamlFile:
     except yaml.YAMLError as exception:
         print("YAML ERROR WHILE LOADING FILE:")
         print(exception)
+        raise Exception

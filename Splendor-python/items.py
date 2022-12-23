@@ -26,8 +26,8 @@ class Card(sprite.Sprite):
             self.image = load("images/cards/facedownCardLevel%s.png" %(self.level+1))
         self.level = self.level
 
-    def update(self):
+    def update(self, screen):
         if False == self.facedown:
-            pygame.draw.rect(self.screen, (0, 255, 0), self.rect, 2)
+            pygame.draw.rect(screen, (0, 255, 0), self.rect, 2)
         else:
-            self.screen.blit(self.image)
+            screen.blit(self.image, self.rect.topleft)
