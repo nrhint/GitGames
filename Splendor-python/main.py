@@ -5,7 +5,7 @@ import pygame
 from time import time, sleep
 
 from loadData import *
-from items import Card
+from items import Card, Token
 
 ##Vars that you can change:
 fps = 60 #This will dirrectly change the hardness of the game.
@@ -27,6 +27,7 @@ gameStart = time()
 
 sprites = []
 cards = pygame.sprite.Group()
+tokens = pygame.sprite.Group()
 
 print("Starting game!")
 run = True
@@ -54,7 +55,19 @@ for i in range(2, 0):
         tmp.rect = pygame.Rect((j*160)+40, (i*150)+15, 80, 120)
         remainingCards = tmp.remainingCards
 
-##Place the tokend:
+##Place the tokens:
+tmp = Token(screen, "blueGem.png", tokens)
+tmp.rect = pygame.Rect(300, 100, 50, 50)
+tmp = Token(screen, "brownGem.png", tokens)
+tmp.rect = pygame.Rect(30, 30, 50, 50)
+tmp = Token(screen, "goldGem.png", tokens)
+tmp.rect = pygame.Rect(30, 30, 50, 50)
+tmp = Token(screen, "greenGem.png", tokens)
+tmp.rect = pygame.Rect(30, 30, 50, 50)
+tmp = Token(screen, "redGem.png", tokens)
+tmp.rect = pygame.Rect(30, 30, 50, 50)
+tmp = Token(screen, "whiteGem.png", tokens)
+tmp.rect = pygame.Rect(30, 30, 50, 50)
 
 ##Place the player layout:
 
@@ -65,6 +78,7 @@ while run == True:
     ##Apply updates to the screen:
     screen.blit(background, (0, 0))
     cards.update(screen)
+    tokens.draw(screen)
     pygame.display.flip()
 
     ##Prepare for next frame
