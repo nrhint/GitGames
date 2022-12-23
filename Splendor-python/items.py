@@ -29,4 +29,9 @@ class Card(sprite.Sprite):
         self.level = self.level
         return self.remainingCards
 
-        
+class Token(sprite.Sprite):
+    def __init__(self, screen, imageName, group):
+        super().__init__()
+        super().add(group)
+        self.imageName = imageName
+        self.load()
