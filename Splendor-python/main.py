@@ -55,17 +55,17 @@ for i in range(0, 3):
 
 ##Place the tokens:
 yOffset = 17
-tmp = Token(screen, "blueGem.png", tokens)
+tmp = Token(screen, "blue", tokens)
 tmp.rect = pygame.Rect(500, 80+yOffset, 80, 80)
-tmp = Token(screen, "brownGem.png", tokens)
+tmp = Token(screen, "brown", tokens)
 tmp.rect = pygame.Rect(500, 230+yOffset, 80, 80)
-tmp = Token(screen, "goldGem.png", tokens)
+tmp = Token(screen, "gold", tokens)
 tmp.rect = pygame.Rect(500, 380+yOffset, 80, 80)
-tmp = Token(screen, "greenGem.png", tokens)
+tmp = Token(screen, "green", tokens)
 tmp.rect = pygame.Rect(600, 80+yOffset, 80, 80)
-tmp = Token(screen, "redGem.png", tokens)
+tmp = Token(screen, "red", tokens)
 tmp.rect = pygame.Rect(600, 230+yOffset, 80, 80)
-tmp = Token(screen, "whiteGem.png", tokens)
+tmp = Token(screen, "white", tokens)
 tmp.rect = pygame.Rect(600, 380+yOffset, 80, 80)
 
 ##Place the player layout:
@@ -86,10 +86,10 @@ tmp.action = "End turn"
 players = []
 for x in range(0, playerCount):
     players.append(Player("Player %s"%x))
-    players[-1].whiteTokens = 9
-    players[-1].redTokens = 9
-    players[-1].blueTokens = 9
-    players[-1].greenTokens = 9
+    # players[-1].whiteTokens = 9
+    # players[-1].redTokens = 9
+    # players[-1].blueTokens = 9
+    # players[-1].greenTokens = 9
 
 ##Last minuite setup:
 print("Starting game!")
@@ -104,7 +104,7 @@ while run == True:
     screen.blit(background, (0, 0))
     screen.blit(myFont.render("%s's turn"%currentPlayer.name, False, (255, 255, 255)), (500, 520))
     cards.update(screen, myFont)
-    tokens.draw(screen)
+    tokens.update(screen, myFont)
     playerItemsGroup.draw(screen)
     pygame.display.flip()
 
@@ -128,10 +128,15 @@ while run == True:
                         result = currentPlayer.buyCard(card)
                         if True == result:
                             remainingCards = card.update(screen, myFont, True, remainingCards, cards)
+                for token in tokens:
+                    if True == token.rect.collidepoint(clickPos) and currentPlayer.status == "Drawing":
+                        print("Trying to draw a token...")
+                        result = currentPlayer.drawToken(token)
         if event.type == myEvents.END_TURN_EVENT:
             turnCounter += 1
             currentPlayer = players[turnCounter%playerCount]
             currentPlayer.action = None
+            currentPlayer.totalTokensDrawn = 0
             print("Changed turns to %s"%currentPlayer)
     ##Sleep if needed
     if nextStep - time() > 0:

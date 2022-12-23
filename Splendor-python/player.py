@@ -24,6 +24,7 @@ class Player:
         self.cards = []
         self.status = None
         self.name = name
+        self.totalTokensDrawn = 0
 
     def buyCard(self, card):
         if "Buying" == self.status and None == card.owner: #Just a safety check that no one owns the card
@@ -45,7 +46,7 @@ class Player:
                     tmpGold -= 1
                 else:
                     success = False
-                    print("Tried to use Gold but not enough :(")
+                    print("Tried to use Gold but not enough tokens :(")
             if True == success:
                 cost = card.cardInfo.costs
                 for x in range(0, 5):#Loop through and subtract the tokens used starting with cards
@@ -62,6 +63,20 @@ class Player:
         else:
             print("You are not in buying mode. Please press the buy button")
             return False
+
+    def drawToken(self, token):
+        currentTokens = [self.whiteTokens, self.greenTokens, self.blueTokens, self.redTokens, self.brownTokens, self.goldTokens]
+        if 0 == token.count:
+            print("Not enough tokens remaining")
+        elif sum(currentTokens) < 10 and self.totalTokensDrawn < 3:
+            currentTokens[colorToIndex[token.name]] += 1
+            self.whiteTokens, self.greenTokens, self.blueTokens, self.redTokens, self.brownTokens, self.goldTokens = currentTokens
+            self.totalTokensDrawn += 1
+            token.count -= 1
+            return True
+        else:
+            print("Too many tokens, click one you have to discard first or end turn.")
+        return False
 
     def update(self, action):
         print("Player updating")

@@ -1,3 +1,17 @@
 todo:
   items.py:
     Have the cards still draw a rect around the borders for contrast (See about line 65 for old working code before chnages)
+    center the number on the tokens [Peter?]
+    pick a better color for the token numbering [Peter]
+    add the noble code (similar to the card code) [Peter]
+  main.py
+    render tokens in the playerspace and have numbers there for the number owned as well as the cards that contribute to them
+    add the nobles to the top [Peter]
+  player.py 
+    make it so that only two of the same color can be taken if there were more than 4 to start with
+    auto obtain nobles as needed
+  Quality of life:
+    clean up print calls
+  Future:
+    Make a load/save game button
+    Create dialouge boxes for when errors happen

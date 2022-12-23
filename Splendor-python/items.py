@@ -101,13 +101,17 @@ class Card(sprite.Sprite):
 
 
 class Token(sprite.Sprite):
-    def __init__(self, screen, imageName, group):
+    def __init__(self, screen, name, group):
         super().__init__()
         super().add(group)
-        self.imageName = imageName
-        self.image = load("images/gems/%s" %imageName)
+        self.name = name
+        self.image = load("images/gems/%sGem.png" %name)
         self.screen = screen
         self.image = pygame.transform.scale(self.image, (80, 80))
-    def draw(self, screen):
-        screen.blit(self.image, self.rect.topleft)
+        self.count = 5
+    
+    def update(self, screen, font):
+        if 0 != self.count:
+            screen.blit(self.image, self.rect.topleft)
+            screen.blit(font.render("%s"%self.count, False, (200, 200, 200)), (self.rect.center))
 
