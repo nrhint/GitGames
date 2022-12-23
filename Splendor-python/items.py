@@ -41,7 +41,7 @@ class Token(sprite.Sprite):
         self.imageName = imageName
         self.image = load("images/gems/%s" %imageName)
         self.screen = screen
-        self.image = pygame.transform.scale(self.image, (50, 50))
+        self.image = pygame.transform.scale(self.image, (80, 80))
     def draw(self, screen):
         screen.blit(self.image, self.rect.topleft)
 

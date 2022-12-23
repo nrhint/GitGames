@@ -57,17 +57,17 @@ for i in range(0, 3):
 
 ##Place the tokens:
 tmp = Token(screen, "blueGem.png", tokens)
-tmp.rect = pygame.Rect(300, 100, 50, 50)
+tmp.rect = pygame.Rect(0, 545, 80, 80)
 tmp = Token(screen, "brownGem.png", tokens)
-tmp.rect = pygame.Rect(30, 30, 50, 50)
+tmp.rect = pygame.Rect(133, 545, 80, 80)
 tmp = Token(screen, "goldGem.png", tokens)
-tmp.rect = pygame.Rect(30, 30, 50, 50)
+tmp.rect = pygame.Rect(266, 545, 80, 80)
 tmp = Token(screen, "greenGem.png", tokens)
-tmp.rect = pygame.Rect(30, 30, 50, 50)
+tmp.rect = pygame.Rect(399, 545, 80, 80)
 tmp = Token(screen, "redGem.png", tokens)
-tmp.rect = pygame.Rect(30, 30, 50, 50)
+tmp.rect = pygame.Rect(532, 545, 80, 80)
 tmp = Token(screen, "whiteGem.png", tokens)
-tmp.rect = pygame.Rect(30, 30, 50, 50)
+tmp.rect = pygame.Rect(665, 545, 80, 80)
 
 ##Place the player layout:
 
