@@ -12,6 +12,7 @@ class CardInfo:
         self.blueCost = blueCost
         self.redCost = redCost
         self.brownCost = brownCost
+        self.costs = [whiteCost, greenCost, blueCost, redCost, brownCost]
 
 ##Parse the card file and load the data into a list
 with open("cards.yaml", 'r') as yamlFile:
