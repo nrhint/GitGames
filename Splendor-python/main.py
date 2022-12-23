@@ -47,10 +47,10 @@ Cards, 3x5 grid  | Tokens
 for i in range(0, 3):
     print("Adding level %s cards to layout" %(i+1))
     ##Add the draw card:
-    tmp = Card(screen, myFont, i, remainingCards, cards, pygame.Rect(10, (i*150)+80, 80, 120), True)
+    tmp = Card(myFont, i, remainingCards, cards, pygame.Rect(10, (i*150)+80, 80, 120), True)
     remainingCards = tmp.remainingCards
     for j in range(0, 4):
-        tmp = Card(screen, myFont, i, remainingCards, cards, pygame.Rect((j*100)+110, (i*150)+80, 80, 120))
+        tmp = Card(myFont, i, remainingCards, cards, pygame.Rect((j*100)+110, (i*150)+80, 80, 120))
         remainingCards = tmp.remainingCards
 
 ##Place the tokens:
@@ -70,14 +70,26 @@ tmp.rect = pygame.Rect(600, 380+yOffset, 80, 80)
 
 ##Place the player layout:
 tmp = pygame.sprite.Sprite(playerItemsGroup)
+tmp.image = pygame.image.load("images/player/drawTokens.png")
+tmp.rect = pygame.Rect(600, 550, 80, 40)
+tmp.action = "Draw"
+tmp = pygame.sprite.Sprite(playerItemsGroup)
+tmp.image = pygame.image.load("images/player/buyCard.png")
+tmp.rect = pygame.Rect(600, 600, 80, 40)
+tmp.action = "Buy"
+tmp = pygame.sprite.Sprite(playerItemsGroup)
 tmp.image = pygame.image.load("images/player/endTurn.png")
-tmp.rect = pygame.Rect(625, 650, 50, 25)
+tmp.rect = pygame.Rect(600, 650, 80, 40)
 tmp.action = "End turn"
 
 ##Create the players:
 players = []
 for x in range(0, playerCount):
-    players.append(Player())
+    players.append(Player("Player %s"%x))
+    players[-1].whiteTokens = 9
+    players[-1].redTokens = 9
+    players[-1].blueTokens = 9
+    players[-1].greenTokens = 9
 
 ##Last minuite setup:
 print("Starting game!")
@@ -90,6 +102,7 @@ while run == True:
 
     ##Apply updates to the screen:
     screen.blit(background, (0, 0))
+    screen.blit(myFont.render("%s's turn"%currentPlayer.name, False, (255, 255, 255)), (500, 520))
     cards.update(screen, myFont)
     tokens.draw(screen)
     playerItemsGroup.draw(screen)
@@ -107,20 +120,26 @@ while run == True:
                 print(clickPos)
                 for playerObject in playerItemsGroup:
                     if True == playerObject.rect.collidepoint(clickPos):
-                        playerObject.update()
+                        print("Clicked player object")
+                        currentPlayer.update(playerObject.action)
                 for card in cards:
-                    if True == card.rect.collidepoint(clickPos):
-                        print("Clicked on a card")
+                    if True == card.rect.collidepoint(clickPos) and currentPlayer.status == "Buying":
+                        print("Clicked on a card to try to buy")
+                        result = currentPlayer.buyCard(card)
+                        if True == result:
+                            remainingCards = card.update(screen, myFont, True, remainingCards, cards)
         if event.type == myEvents.END_TURN_EVENT:
             turnCounter += 1
             currentPlayer = players[turnCounter%playerCount]
+            currentPlayer.action = None
             print("Changed turns to %s"%currentPlayer)
     ##Sleep if needed
     if nextStep - time() > 0:
         try:
             sleep(nextStep - time())
         except ValueError:
-            pass
+            print("Missed frame timing")
     frameCount += 1
-
+gameEnd = time()
+print("FPS: %s"%(frameCount/(gameEnd-gameStart)))
 print("Thanks for playing!")

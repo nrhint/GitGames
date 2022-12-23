@@ -36,16 +36,16 @@ colorToIndex = {
 
 ##This clas will controll the cards
 class Card(sprite.Sprite): 
-    def __init__(self, screen, font, level, remainingCards, group, rect, facedown = False):
+    def __init__(self, font, level, remainingCards, group, rect, facedown = False):
         super().__init__()
         super().add(group)
-        self.screen = screen
         self.level = level
         self.remainingCards = remainingCards
         self.facedown = facedown
         self.level = self.level
         self.rect = rect
         self.font = font
+        self.owner = None
         self.surfaceRect = pygame.Rect((0, 0), self.rect.size)
         self.colors = [(0, 255, 0), (255, 0, 0), (0, 0, 255)]
         self.cardColors = [(255, 255, 255), (22, 181, 0), (30, 34, 207), (208, 10, 0), (94, 50, 17), (255, 215, 0)]
@@ -90,9 +90,14 @@ class Card(sprite.Sprite):
             self.image = load("images/cards/facedownCardLevel%s.png" %(self.level+1))
             self.backgroundSurface.blit(self.image, (0, 0))
 
+    def update(self, screen, font, replace = False, remainingCards = None, cardsGroup = None):
+        if True == replace:
+            self.remove(cardsGroup)
+            tmp = Card(self.font, self.level, remainingCards, cardsGroup, self.rect)
+            return tmp.remainingCards
+        else:
+            screen.blit(self.backgroundSurface, self.rect.topleft)
 
-    def update(self, screen, font):
-        screen.blit(self.backgroundSurface, self.rect.topleft)
 
 
 class Token(sprite.Sprite):

@@ -1,5 +1,5 @@
-from pygame import USEREVENT
+from pygame.event import custom_type
 
-END_TURN_EVENT = USEREVENT+1
-PLAYER_BUY_CARD_EVENT = USEREVENT+2
-PLAYER_DRAW_EVENT = USEREVENT+3
+END_TURN_EVENT = custom_type()
+PLAYER_BUY_CARD_EVENT = custom_type()
+PLAYER_DRAW_EVENT = custom_type()
