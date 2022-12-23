@@ -32,3 +32,16 @@ class Card(sprite.Sprite):
             pygame.draw.rect(screen, self.colors[self.level], self.rect, 2)
         else:
             screen.blit(self.image, self.rect.topleft)
+
+
+class Token(sprite.Sprite):
+    def __init__(self, screen, imageName, group):
+        super().__init__()
+        super().add(group)
+        self.imageName = imageName
+        self.image = load("images/gems/%s" %imageName)
+        self.screen = screen
+        self.image = pygame.transform.scale(self.image, (80, 80))
+    def draw(self, screen):
+        screen.blit(self.image, self.rect.topleft)
+
