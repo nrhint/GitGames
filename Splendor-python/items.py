@@ -14,6 +14,7 @@ class Card(sprite.Sprite):
         self.level = level
         self.remainingCards = remainingCards
         self.facedown = facedown
+        self.colors = [(0, 255, 0), (255, 0, 0), (0, 0, 255)]
         ##Generate the card
         if False == self.facedown:
             try:
@@ -26,6 +27,13 @@ class Card(sprite.Sprite):
             self.image = load("images/cards/facedownCardLevel%s.png" %(self.level+1))
         self.level = self.level
 
+    def update(self, screen):
+        if False == self.facedown:
+            pygame.draw.rect(screen, self.colors[self.level], self.rect, 2)
+        else:
+            screen.blit(self.image, self.rect.topleft)
+
+
 class Token(sprite.Sprite):
     def __init__(self, screen, imageName, group):
         super().__init__()
@@ -36,3 +44,4 @@ class Token(sprite.Sprite):
         self.image = pygame.transform.scale(self.image, (50, 50))
     def draw(self, screen):
         screen.blit(self.image, self.rect.topleft)
+

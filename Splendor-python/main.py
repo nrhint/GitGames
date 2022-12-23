@@ -8,9 +8,10 @@ from loadData import *
 from items import Card, Token
 
 ##Vars that you can change:
+nobleCount = 3
 fps = 60 #This will dirrectly change the hardness of the game.
 step = 1/fps #Using time to delay if needed
-width, height = 800, 600
+width, height = 800, 800
 
 pygame.init()
 screen = pygame.display.set_mode((width, height))
@@ -25,7 +26,6 @@ myfont = pygame.font.SysFont('Comic Sans MS', 30)
 
 gameStart = time()
 
-sprites = []
 cards = pygame.sprite.Group()
 tokens = pygame.sprite.Group()
 
@@ -44,15 +44,15 @@ Tokens, 1x5
 ##Place the nobles:
 
 ##Place the cards:
-for i in range(2, 0):
+for i in range(0, 3):
     print("Adding level %s cards to layout" %(i+1))
     ##Add the draw card:
     tmp = Card(screen, i, remainingCards, cards, True)
-    tmp.rect = pygame.Rect(40, (i*150)+15, 80, 120)
+    tmp.rect = pygame.Rect(40, ((i+1)*150)+15, 80, 120)
     remainingCards = tmp.remainingCards
     for j in range(0, 5):
         tmp = Card(screen, i, remainingCards, cards)
-        tmp.rect = pygame.Rect((j*160)+40, (i*150)+15, 80, 120)
+        tmp.rect = pygame.Rect((j*160)+40, ((i+1)*150)+15, 80, 120)
         remainingCards = tmp.remainingCards
 
 ##Place the tokens:
@@ -91,13 +91,18 @@ while run == True:
             if pygame.mouse.get_pressed() == (True, False, False):
                 clickPos = pygame.mouse.get_pos()
                 print(clickPos)
-                for sprite in sprites:
-                    if sprite.rect.collidepoint(clickPos):
-                        pass
+                for card in cards:
+                    if True == card.rect.collidepoint(clickPos):
+                        print("Clicked on a card")
+                        card.wasClicked()
+                
 
     ##Sleep if needed
     if nextStep - time() > 0:
-        sleep(nextStep - time())
+        try:
+            sleep(nextStep - time())
+        except ValueError:
+            pass
     frameCount += 1
 
 print("Thanks for playing!")
