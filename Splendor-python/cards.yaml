@@ -1,0 +1,13 @@
+#The format for the cards is [pointValue, color, white, green, blue, red, brown]
+---
+- 
+  - [1, 'blue', 0, 0, 0, 4, 0]
+  - [0, 'red', 3, 0, 0, 0, 0]
+  - [0, 'red', 2, 1, 0, 0, 2]
+  - [1, 'brown', 0, 0, 4, 0, 0]
+  - [0, 'blue', 1, 1, 0, 2, 1]
+  - [0, 'brown', 2, 2, 0, 0, 0]
+-
+  - [0, 'brown', 1, 1, 2, 1, 0]
+-
+  - [4, 'brown', 0, 0, 0, 4, 0]
