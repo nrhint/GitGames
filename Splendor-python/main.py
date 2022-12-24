@@ -6,7 +6,7 @@ from time import time, sleep
 
 from loadData import *
 from items import Card, Token
-from player import Player
+from player import Player, playerItemsGroup
 import myEvents
 
 ##Vars that you can change:
@@ -22,16 +22,17 @@ pygame.display.set_caption("Splendor")
 
 background = pygame.Surface(screen.get_size())
 background = background.convert()
-background.fill((100, 100, 100))
+background.fill((128, 100, 100))
 
 pygame.font.init() # you have to call this at the start,  if you want to use this module.
-myFont = pygame.font.SysFont('Comic Sans MS', 30)
+smallFont = pygame.font.SysFont('Comic Sans MS', 30)
+mediumFont = pygame.font.SysFont('Comic Sans MS', 60)
+largeFont = pygame.font.SysFont('Comic Sans MS', 90)
 
 gameStart = time()
 
 cards = pygame.sprite.Group()
 tokens = pygame.sprite.Group()
-playerItemsGroup = pygame.sprite.Group()
 
 ##Setup the screen:
 """Game layout:
@@ -47,49 +48,32 @@ Cards, 3x5 grid  | Tokens
 for i in range(0, 3):
     print("Adding level %s cards to layout" %(i+1))
     ##Add the draw card:
-    tmp = Card(myFont, i, remainingCards, cards, pygame.Rect(10, (i*150)+80, 80, 120), True)
+    tmp = Card(smallFont, i, remainingCards, cards, pygame.Rect(10, (i*150)+80, 80, 120), True)
     remainingCards = tmp.remainingCards
     for j in range(0, 4):
-        tmp = Card(myFont, i, remainingCards, cards, pygame.Rect((j*100)+110, (i*150)+80, 80, 120))
+        tmp = Card(smallFont, i, remainingCards, cards, pygame.Rect((j*100)+110, (i*150)+80, 80, 120))
         remainingCards = tmp.remainingCards
 
 ##Place the tokens:
 yOffset = 17
-tmp = Token(screen, "blue", tokens)
+tmp = Token("blue", tokens)
 tmp.rect = pygame.Rect(500, 80+yOffset, 80, 80)
-tmp = Token(screen, "brown", tokens)
+tmp = Token("brown", tokens)
 tmp.rect = pygame.Rect(500, 230+yOffset, 80, 80)
-tmp = Token(screen, "gold", tokens)
+tmp = Token("gold", tokens)
 tmp.rect = pygame.Rect(500, 380+yOffset, 80, 80)
-tmp = Token(screen, "green", tokens)
+tmp = Token("green", tokens)
 tmp.rect = pygame.Rect(600, 80+yOffset, 80, 80)
-tmp = Token(screen, "red", tokens)
+tmp = Token("red", tokens)
 tmp.rect = pygame.Rect(600, 230+yOffset, 80, 80)
-tmp = Token(screen, "white", tokens)
+tmp = Token("white", tokens)
 tmp.rect = pygame.Rect(600, 380+yOffset, 80, 80)
-
-##Place the player layout:
-tmp = pygame.sprite.Sprite(playerItemsGroup)
-tmp.image = pygame.image.load("images/player/drawTokens.png")
-tmp.rect = pygame.Rect(600, 550, 80, 40)
-tmp.action = "Draw"
-tmp = pygame.sprite.Sprite(playerItemsGroup)
-tmp.image = pygame.image.load("images/player/buyCard.png")
-tmp.rect = pygame.Rect(600, 600, 80, 40)
-tmp.action = "Buy"
-tmp = pygame.sprite.Sprite(playerItemsGroup)
-tmp.image = pygame.image.load("images/player/endTurn.png")
-tmp.rect = pygame.Rect(600, 650, 80, 40)
-tmp.action = "End turn"
 
 ##Create the players:
 players = []
 for x in range(0, playerCount):
     players.append(Player("Player %s"%x))
-    # players[-1].whiteTokens = 9
-    # players[-1].redTokens = 9
-    # players[-1].blueTokens = 9
-    # players[-1].greenTokens = 9
+    # players[-1].currentTokens = [9, 9, 9, 9, 9, 5]
 
 ##Last minuite setup:
 print("Starting game!")
@@ -102,10 +86,13 @@ while run == True:
 
     ##Apply updates to the screen:
     screen.blit(background, (0, 0))
-    screen.blit(myFont.render("%s's turn"%currentPlayer.name, False, (255, 255, 255)), (500, 520))
-    cards.update(screen, myFont)
-    tokens.update(screen, myFont)
+    screen.blit(smallFont.render("%s's turn"%currentPlayer.name, False, (255, 255, 255)), (500, 525))
+    cards.update(screen, smallFont)
+    tokens.update(screen, largeFont)
     playerItemsGroup.draw(screen)
+    for playerObject in playerItemsGroup:
+        if type(playerObject) == Token:
+            playerObject.update(screen, mediumFont, currentPlayer)
     pygame.display.flip()
 
     ##Prepare for next frame
@@ -119,19 +106,23 @@ while run == True:
                 clickPos = pygame.mouse.get_pos()
                 print(clickPos)
                 for playerObject in playerItemsGroup:
-                    if True == playerObject.rect.collidepoint(clickPos):
+                    if True == playerObject.rect.collidepoint(clickPos) and type(playerObject) != Token:
                         print("Clicked player object")
                         currentPlayer.update(playerObject.action)
                 for card in cards:
                     if True == card.rect.collidepoint(clickPos) and currentPlayer.status == "Buying":
                         print("Clicked on a card to try to buy")
                         result = currentPlayer.buyCard(card)
+                        cards.remove(card)
                         if True == result:
-                            remainingCards = card.update(screen, myFont, True, remainingCards, cards)
+                            remainingCards = card.update(screen, smallFont, True, remainingCards, cards)
                 for token in tokens:
                     if True == token.rect.collidepoint(clickPos) and currentPlayer.status == "Drawing":
                         print("Trying to draw a token...")
-                        result = currentPlayer.drawToken(token)
+                        result = currentPlayer.drawNewToken(token)
+                        if True == result:
+                            print("Success on buying token!")
+                        
         if event.type == myEvents.END_TURN_EVENT:
             turnCounter += 1
             currentPlayer = players[turnCounter%playerCount]

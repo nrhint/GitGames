@@ -1,6 +1,5 @@
 todo:
   items.py:
-    Have the cards still draw a rect around the borders for contrast (See about line 65 for old working code before chnages)
     center the number on the tokens [Peter?]
     pick a better color for the token numbering [Peter]
     add the noble code (similar to the card code) [Peter]

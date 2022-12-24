@@ -6,6 +6,8 @@ from pygame import sprite
 from random import choice
 import pygame
 
+from dataManipulation import colorToIndex, invertedColorToRGB
+
 ##Load the images to be used
 ## [white, green, blue, red, brown]
 brownTokenImage = load("images/gems/brownGem.png")
@@ -24,15 +26,6 @@ tokenImages = [
 smallTokenImages = []
 for tokenImage in tokenImages:
     smallTokenImages.append(pygame.transform.scale(tokenImage, (17, 17)))
-
-colorToIndex = {
-    'white':0, 
-    'green':1, 
-    'blue':2, 
-    'red':3, 
-    'brown':4,
-    'gold':5
-}
 
 ##This clas will controll the cards
 class Card(sprite.Sprite): 
@@ -67,6 +60,7 @@ class Card(sprite.Sprite):
             # pygame.draw.rect(self.backgroundSurface, self.colors[self.level], pygame.Rect((0, 0), self.rect.size), 2, -5)
             self.backgroundSurface.fill((100, 100, 100))
             self.backgroundSurface.blit(self.alphaSurface, (0, 0))
+            pygame.draw.rect(self.backgroundSurface, self.colors[self.level], pygame.Rect((0, 0), (self.backgroundSurface.get_size())), 2)
             imageWidthPadded = (smallTokenImages[0].get_width()/4)+smallTokenImages[0].get_width()
             ##Blit card token image to surface
             pos = (self.backgroundSurface.get_width()-(tokenImages[0].get_width())-5, +5)
@@ -92,7 +86,6 @@ class Card(sprite.Sprite):
 
     def update(self, screen, font, replace = False, remainingCards = None, cardsGroup = None):
         if True == replace:
-            self.remove(cardsGroup)
             tmp = Card(self.font, self.level, remainingCards, cardsGroup, self.rect)
             return tmp.remainingCards
         else:
@@ -101,17 +94,22 @@ class Card(sprite.Sprite):
 
 
 class Token(sprite.Sprite):
-    def __init__(self, screen, name, group):
+    def __init__(self, name, group):
         super().__init__()
         super().add(group)
         self.name = name
         self.image = load("images/gems/%sGem.png" %name)
-        self.screen = screen
         self.image = pygame.transform.scale(self.image, (80, 80))
         self.count = 5
     
-    def update(self, screen, font):
-        if 0 != self.count:
-            screen.blit(self.image, self.rect.topleft)
-            screen.blit(font.render("%s"%self.count, False, (200, 200, 200)), (self.rect.center))
-
+    def update(self, screen, font, player = False):
+        screen.blit(self.image, self.rect.topleft)
+        if 0 != self.count and False == player:
+            pos = (self.rect.topleft[0]+20, self.rect.topleft[1]+10)
+            screen.blit(font.render("%s"%self.count, False, invertedColorToRGB[self.name]), pos)
+        elif 0 != self.count:
+            pos = (self.rect.topleft[0]+10, self.rect.topleft[1]+20)
+            cardTokens = [0, 0, 0, 0, 0, 0]
+            for card in player.cards:
+                cardTokens[colorToIndex[card.cardInfo.tokenColor]] += 1
+            screen.blit(font.render("%s(%s)"%(player.currentTokens[colorToIndex[self.name]], cardTokens[colorToIndex[self.name]]), False, invertedColorToRGB[self.name]), pos)

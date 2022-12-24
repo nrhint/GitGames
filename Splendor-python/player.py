@@ -2,16 +2,41 @@
 ##This file will hold the player information
 
 import pygame
-import myEvents
 
-colorToIndex = {
-    'white':0, 
-    'green':1, 
-    'blue':2, 
-    'red':3, 
-    'brown':4,
-    'gold':5
-}
+import myEvents
+from items import Token
+from dataManipulation import colorToIndex, colorToRGB
+
+##Load player assets
+playerItemsGroup = pygame.sprite.Group()
+
+##Place the player layout:
+tmp = pygame.sprite.Sprite(playerItemsGroup)
+tmp.image = pygame.image.load("images/player/drawTokens.png")
+tmp.rect = pygame.Rect(600, 550, 80, 40)
+tmp.action = "Draw"
+tmp = pygame.sprite.Sprite(playerItemsGroup)
+tmp.image = pygame.image.load("images/player/buyCard.png")
+tmp.rect = pygame.Rect(600, 600, 80, 40)
+tmp.action = "Buy"
+tmp = pygame.sprite.Sprite(playerItemsGroup)
+tmp.image = pygame.image.load("images/player/endTurn.png")
+tmp.rect = pygame.Rect(600, 650, 80, 40)
+tmp.action = "End turn"
+
+tmp = Token("green", playerItemsGroup)
+tmp.rect = pygame.Rect(110, 525, 80, 80)
+tmp = Token("red", playerItemsGroup)
+tmp.rect = pygame.Rect(210, 525, 80, 80)
+tmp = Token("white", playerItemsGroup)
+tmp.rect = pygame.Rect(310, 525, 80, 80)
+tmp = Token("blue", playerItemsGroup)
+tmp.rect = pygame.Rect(110, 612, 80, 80)
+tmp = Token("brown", playerItemsGroup)
+tmp.rect = pygame.Rect(210, 612, 80, 80)
+tmp = Token("gold", playerItemsGroup)
+tmp.rect = pygame.Rect(310, 612, 80, 80)
+
 
 class Player:
     def __init__(self, name):
@@ -21,16 +46,16 @@ class Player:
         self.redTokens = 0
         self.brownTokens = 0
         self.goldTokens = 0
+        self.currentTokens = [self.whiteTokens, self.greenTokens, self.blueTokens, self.redTokens, self.brownTokens, self.goldTokens]
         self.cards = []
         self.status = None
         self.name = name
         self.totalTokensDrawn = 0
 
     def buyCard(self, card):
-        if "Buying" == self.status and None == card.owner: #Just a safety check that no one owns the card
+        if "Buying" == self.status and None == card.owner and self.totalTokensDrawn == 0: #Just a safety check that no one owns the card
             success = True #assume success
             ##Check for enough money
-            realTokens = [self.whiteTokens, self.greenTokens, self.blueTokens, self.redTokens, self.brownTokens]
             cardTokens = [0, 0, 0, 0, 0]
             for card in self.cards:
                 cardTokens[colorToIndex[card.cardInfo.tokenColor]] += 1
@@ -39,21 +64,22 @@ class Player:
             tmpGold = self.goldTokens
             resultingTokens = []
             for x in range(0, 5):
-                resultingTokens.append((cardTokens[x]+realTokens[x])-card.cardInfo.costs[x])
+                resultingTokens.append((cardTokens[x]+self.currentTokens[x])-card.cardInfo.costs[x])
             while min(resultingTokens) < 0 and True == success:
                 if tmpGold > 0:
-                    resultingTokens[resultingTokens.index(min(resultingTokens))] -= 1
+                    resultingTokens[resultingTokens.index(min(resultingTokens))] += 1
                     tmpGold -= 1
                 else:
                     success = False
                     print("Tried to use Gold but not enough tokens :(")
             if True == success:
+                self.currentTokens[-1] = tmpGold
                 cost = card.cardInfo.costs
                 for x in range(0, 5):#Loop through and subtract the tokens used starting with cards
                     cost[x] -= cardTokens[x]
                     if cost[x] > 0:
-                        realTokens[x] -= cost[x]
-                self.whiteTokens, self.greenTokens, self.blueTokens, self.redTokens, self.brownTokens = realTokens
+                        self.currentTokens[x] -= cost[x]
+                self.whiteTokens, self.greenTokens, self.blueTokens, self.redTokens, self.brownTokens, self.goldTokens = self.currentTokens
                 self.cards.append(card)
                 card.owner = self
                 self.update("End turn")
@@ -61,16 +87,18 @@ class Player:
             else:
                 return False
         else:
+            if self.totalTokensDrawn != 0:
+                print("Are you trying to cheat? You already drew tokens this turn")
+                self.update("End turn")
             print("You are not in buying mode. Please press the buy button")
             return False
 
-    def drawToken(self, token):
-        currentTokens = [self.whiteTokens, self.greenTokens, self.blueTokens, self.redTokens, self.brownTokens, self.goldTokens]
+    def drawNewToken(self, token):
         if 0 == token.count:
             print("Not enough tokens remaining")
-        elif sum(currentTokens) < 10 and self.totalTokensDrawn < 3:
-            currentTokens[colorToIndex[token.name]] += 1
-            self.whiteTokens, self.greenTokens, self.blueTokens, self.redTokens, self.brownTokens, self.goldTokens = currentTokens
+        elif sum(self.currentTokens) < 10 and self.totalTokensDrawn < 3:
+            self.currentTokens[colorToIndex[token.name]] += 1
+            self.whiteTokens, self.greenTokens, self.blueTokens, self.redTokens, self.brownTokens, self.goldTokens = self.currentTokens
             self.totalTokensDrawn += 1
             token.count -= 1
             return True
