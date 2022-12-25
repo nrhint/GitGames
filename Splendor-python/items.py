@@ -48,8 +48,11 @@ class Card(sprite.Sprite):
             self.cardInfo = choice(self.remainingCards[self.level])
             self.remainingCards[self.level].remove(self.cardInfo)
         except IndexError:
-            print("Invalid card level %s" %self.level)
-            raise ValueError
+            if [] == self.remainingCards[self.level]:
+                print("Out of cards of that color :(")
+            else:
+                print("Invalid card level %s" %self.level)
+                raise ValueError
 
         ##Generate the card
         self.backgroundSurface = pygame.Surface(self.rect.size)

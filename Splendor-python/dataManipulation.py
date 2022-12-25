@@ -28,3 +28,12 @@ colorToIndex = {
     'brown':4,
     'gold':5
 }
+
+indexToColor = {
+    0:'white', 
+    1:'green', 
+    2:'blue', 
+    3:'red', 
+    4:'brown',
+    5:'gold'
+}

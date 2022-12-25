@@ -11,7 +11,7 @@ import myEvents
 
 ##Vars that you can change:
 nobleCount = 3
-playerCount = 2
+playerCount = 3
 fps = 60 #This will dirrectly change the hardness of the game.
 step = 1/fps #Using time to delay if needed
 width, height = 700, 700
@@ -72,8 +72,9 @@ tmp.rect = pygame.Rect(600, 380+yOffset, 80, 80)
 ##Create the players:
 players = []
 for x in range(0, playerCount):
-    players.append(Player("Player %s"%x))
-    # players[-1].currentTokens = [9, 9, 9, 9, 9, 5]
+    pName = input("Enter player %s's name: "%x)
+    players.append(Player("%s"%pName))
+    players[-1].currentTokens = [900, 900, 900, 900, 900, 5]
 
 ##Last minuite setup:
 print("Starting game!")
@@ -87,6 +88,7 @@ while run == True:
     ##Apply updates to the screen:
     screen.blit(background, (0, 0))
     screen.blit(smallFont.render("%s's turn"%currentPlayer.name, False, (255, 255, 255)), (500, 525))
+    screen.blit(smallFont.render("%s points"%currentPlayer.points, False, (255, 255, 255)), (450, 650))
     cards.update(screen, smallFont)
     tokens.update(screen, largeFont)
     playerItemsGroup.draw(screen)
@@ -112,7 +114,7 @@ while run == True:
                 for card in cards:
                     if True == card.rect.collidepoint(clickPos) and currentPlayer.status == "Buying":
                         print("Clicked on a card to try to buy")
-                        result = currentPlayer.buyCard(card)
+                        result = currentPlayer.buyCard(card, tokens)
                         cards.remove(card)
                         if True == result:
                             remainingCards = card.update(screen, smallFont, True, remainingCards, cards)

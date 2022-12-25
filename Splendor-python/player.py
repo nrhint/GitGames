@@ -5,7 +5,7 @@ import pygame
 
 import myEvents
 from items import Token
-from dataManipulation import colorToIndex, colorToRGB
+from dataManipulation import colorToIndex
 
 ##Load player assets
 playerItemsGroup = pygame.sprite.Group()
@@ -50,10 +50,11 @@ class Player:
         self.cards = []
         self.status = None
         self.name = name
+        self.points = 0
         self.totalTokensDrawn = 0
 
-    def buyCard(self, card):
-        if "Buying" == self.status and None == card.owner and self.totalTokensDrawn == 0: #Just a safety check that no one owns the card
+    def buyCard(self, cardToPurchase, tokens):
+        if "Buying" == self.status and None == cardToPurchase.owner and self.totalTokensDrawn == 0: #Just a safety check that no one owns the card
             success = True #assume success
             ##Check for enough money
             cardTokens = [0, 0, 0, 0, 0]
@@ -61,10 +62,10 @@ class Player:
                 cardTokens[colorToIndex[card.cardInfo.tokenColor]] += 1
             
             #Find out how many tokens are needed and maybe use gold if needed
-            tmpGold = self.goldTokens
+            tmpGold = self.currentTokens[-1]
             resultingTokens = []
             for x in range(0, 5):
-                resultingTokens.append((cardTokens[x]+self.currentTokens[x])-card.cardInfo.costs[x])
+                resultingTokens.append((cardTokens[x]+self.currentTokens[x])-cardToPurchase.cardInfo.costs[x])
             while min(resultingTokens) < 0 and True == success:
                 if tmpGold > 0:
                     resultingTokens[resultingTokens.index(min(resultingTokens))] += 1
@@ -74,14 +75,17 @@ class Player:
                     print("Tried to use Gold but not enough tokens :(")
             if True == success:
                 self.currentTokens[-1] = tmpGold
-                cost = card.cardInfo.costs
+                cost = cardToPurchase.cardInfo.costs
+                for token in tokens:
+                    token.count += self.currentTokens[colorToIndex[token.name]]
                 for x in range(0, 5):#Loop through and subtract the tokens used starting with cards
                     cost[x] -= cardTokens[x]
                     if cost[x] > 0:
-                        self.currentTokens[x] -= cost[x]
+                       self.currentTokens[x] = max(self.currentTokens[x]-cost[x], 0)
                 self.whiteTokens, self.greenTokens, self.blueTokens, self.redTokens, self.brownTokens, self.goldTokens = self.currentTokens
-                self.cards.append(card)
-                card.owner = self
+                self.cards.append(cardToPurchase)
+                cardToPurchase.owner = self
+                self.points += cardToPurchase.cardInfo.pointValue
                 self.update("End turn")
                 return True
             else:
@@ -97,6 +101,13 @@ class Player:
         if 0 == token.count:
             print("Not enough tokens remaining")
         elif sum(self.currentTokens) < 10 and self.totalTokensDrawn < 3:
+            if 'gold' == token.name:
+                if 0 != self.totalTokensDrawn:
+                    print("You can only draw a gold in place of 3 tiles...")
+                    return False
+                else:
+                    self.totalTokensDrawn = 1
+
             self.currentTokens[colorToIndex[token.name]] += 1
             self.whiteTokens, self.greenTokens, self.blueTokens, self.redTokens, self.brownTokens, self.goldTokens = self.currentTokens
             self.totalTokensDrawn += 1
