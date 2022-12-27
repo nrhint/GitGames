@@ -24,6 +24,13 @@ class Linear_QNet(nn.Module):
         filename = os.path.join(model_folder_path, filename)
         torch.save(self.state_dict(), filename)
 
+    def load(self):
+        runNumber = input("Enter the run number: ")
+        highScore = input("Enter the high score of the run: ")
+        filename = "model-run%s-%s.pth"%(runNumber, highScore)
+        loadedData = torch.load(filename)
+        self.load_state_dict(loadedData['state_dict'])
+        self.optimizer.load_state_dict(loadedData['optimizer'])
 
 class QTrainer:
     def __init__(self, model , lr, gamma):

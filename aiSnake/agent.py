@@ -114,6 +114,7 @@ def train(loadFromSave):
     record_score = 0
     agent = Agent()
     if loadFromSave:
+        print("Loading from save...")
         agent.model.load()
     game = SnakeGameAI()
     while True:
