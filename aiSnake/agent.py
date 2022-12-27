@@ -5,6 +5,7 @@ from collections import deque
 
 import logging
 from time import time
+import sys
 
 with open("runCount", 'r') as file:
     runCount = int(file.read())
@@ -106,12 +107,14 @@ class Agent:
 
         return final_move
 
-def train():
+def train(loadFromSave):
     plot_score = []
     plot_mean_scores = []
     total_score = 0
     record_score = 0
     agent = Agent()
+    if loadFromSave:
+        agent.model.load()
     game = SnakeGameAI()
     while True:
         # if not agent.n_games%10:
@@ -141,6 +144,11 @@ def train():
             mean_score = total_score / agent.n_games
             plot_mean_scores.append(mean_score)
             logging.info("Game: " + str(agent.n_games) + " Score: " + str(score) + " High score: " + str(record_score) + " Time: " + str(time()))
-            # plot(plot_score, plot_mean_scores)
+            plot(plot_score, plot_mean_scores)
 if __name__ == "__main__":
-    train()
+    loadFromSave = False
+    if 1 != len(sys.argv):
+        print(sys.argv)
+        if sys.argv[1] == "--load" or sys.argv[1] == "-l":
+            loadFromSave = True
+    train(loadFromSave)
