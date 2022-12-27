@@ -34,7 +34,7 @@ class SnakeGameAI:
         self.display = pygame.display.set_mode((self.w, self.h))
         pygame.display.set_caption('Snake')
         self.clock = pygame.time.Clock()
-        self.visual = False
+        self.visual = True
         self.reset()
         
     def reset(self):
@@ -119,7 +119,7 @@ class SnakeGameAI:
         text = font.render("Score: " + str(self.score), True, WHITE)
         self.display.blit(text, [0, 0])
         pygame.display.flip()
-        self.visual = False
+        # self.visual = False
         
     def _move(self, action):
         # [straight, right, left]
