@@ -16,6 +16,7 @@ else:
 with open("runCount", 'w') as file:
     file.write(str(runCount+1))
 
+os.makedirs("logs", exist_ok=True)
 logging.basicConfig(filename='logs/run%s.log'%runCount, encoding='utf-8', level=logging.INFO)
 logging.info('Run started at: %s'%time())
 
