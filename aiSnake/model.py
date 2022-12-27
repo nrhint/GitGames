@@ -15,23 +15,6 @@ class Linear_QNet(nn.Module):
         x = self.linear2(x)
         return x
 
-    def save(self, runCount, size):
-        filename = "model-run%s-%s.pth"%(runCount, size)
-        model_folder_path = './model'
-        if not os.path.exists(model_folder_path):
-            os.makedirs(model_folder_path)
-        
-        filename = os.path.join(model_folder_path, filename)
-        torch.save(self.state_dict(), filename)
-
-    def load(self):
-        runNumber = input("Enter the run number: ")
-        highScore = input("Enter the high score of the run: ")
-        filename = "model-run%s-%s.pth"%(runNumber, highScore)
-        loadedData = torch.load(filename)
-        self.load_state_dict(loadedData['state_dict'])
-        self.optimizer.load_state_dict(loadedData['optimizer'])
-
 class QTrainer:
     def __init__(self, model , lr, gamma):
         self.model = model
@@ -69,3 +52,25 @@ class QTrainer:
 
         self.optimizer.step()
 
+    def save(self, runCount, size):
+        filename = "model-run%s-%s.pth"%(runCount, size)
+        model_folder_path = './model'
+        checkpoint = {
+            'state_dict': self.model.state_dict(),
+            'optimizer': self.optimizer.state_dict()
+        }
+        if not os.path.exists(model_folder_path):
+            os.makedirs(model_folder_path)
+        
+        filename = os.path.join(model_folder_path, filename)
+        torch.save(checkpoint, filename)
+
+    def load(self):
+        runNumber = input("Enter the run number: ")
+        highScore = input("Enter the high score of the run: ")
+        filename = "./model/model-run%s-%s.pth"%(runNumber, highScore)
+        checkpoint = torch.load(filename)
+        self.model.load_state_dict(checkpoint['state_dict'])
+        self.optimizer.load_state_dict(checkpoint['optimizer'])
+        print("Loaded!")
+        # print(checkpoint)

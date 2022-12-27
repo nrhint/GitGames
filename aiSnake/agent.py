@@ -2,7 +2,7 @@ import torch
 import random
 import numpy as np
 from collections import deque
-
+import os
 import logging
 from time import time
 import sys
@@ -107,7 +107,7 @@ class Agent:
 
         return final_move
 
-def train(loadFromSave):
+def train(loadFromSave, visual):
     plot_score = []
     plot_mean_scores = []
     total_score = 0
@@ -115,8 +115,8 @@ def train(loadFromSave):
     agent = Agent()
     if loadFromSave:
         print("Loading from save...")
-        agent.model.load()
-    game = SnakeGameAI()
+        agent.trainer.load()
+    game = SnakeGameAI(visual)
     while True:
         # if not agent.n_games%10:
         #     game.visual = True
@@ -137,7 +137,7 @@ def train(loadFromSave):
             agent.train_long_memory()
             if score > record_score:
                 record_score = score
-                agent.model.save(runCount, score)
+                agent.trainer.save(runCount, score)
 
             print("Game", agent.n_games, "Record", record_score, "Score", score)
             plot_score.append(score)
@@ -145,11 +145,15 @@ def train(loadFromSave):
             mean_score = total_score / agent.n_games
             plot_mean_scores.append(mean_score)
             logging.info("Game: " + str(agent.n_games) + " Score: " + str(score) + " High score: " + str(record_score) + " Time: " + str(time()))
-            plot(plot_score, plot_mean_scores)
+            if agent.n_games%50 == 0:
+                plot(plot_score, plot_mean_scores)
 if __name__ == "__main__":
     loadFromSave = False
+    visual = False
     if 1 != len(sys.argv):
         print(sys.argv)
-        if sys.argv[1] == "--load" or sys.argv[1] == "-l":
+        if "--load" in sys.argv or "-l" in sys.argv:
             loadFromSave = True
-    train(loadFromSave)
+        if "--visual"  in sys.argv or "-vi" in sys.argv:
+            visual = True
+    train(loadFromSave, visual)

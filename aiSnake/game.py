@@ -1,11 +1,13 @@
-import pygame
 import random
 from enum import Enum
 from collections import namedtuple
 import numpy as np
+import os
 
-pygame.init()
-font = pygame.font.Font('arial.ttf', 25)
+try:
+    import pygame
+except ModuleNotFoundError:
+    print("Not importing pygame")
 
 class Direction(Enum):
     RIGHT = 1
@@ -23,18 +25,21 @@ BLUE2 = (0, 100, 255)
 BLACK = (0,0,0)
 
 BLOCK_SIZE = 20
-SPEED = 0
+SPEED = 20
 
 class SnakeGameAI:
     
-    def __init__(self, w=640, h=480):
+    def __init__(self, visual, w=640, h=480):
         self.w = w
         self.h = h
-        # init display
-        self.display = pygame.display.set_mode((self.w, self.h))
-        pygame.display.set_caption('Snake')
-        self.clock = pygame.time.Clock()
-        self.visual = True
+        self.visual = visual
+        if self.visual:
+            pygame.init()
+            self.font = pygame.font.Font('arial.ttf', 25)
+            # init display
+            self.display = pygame.display.set_mode((self.w, self.h))
+            pygame.display.set_caption('Snake')
+            self.clock = pygame.time.Clock()
         self.reset()
         
     def reset(self):
@@ -60,10 +65,11 @@ class SnakeGameAI:
     def play_step(self, action):
         # 1. collect user input
         self.frameIteration += 1
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                pygame.quit()
-                quit()
+        if self.visual:
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    pygame.quit()
+                    quit()
         
         # 2. move
         self._move(action) # update the head
@@ -116,7 +122,7 @@ class SnakeGameAI:
             
         pygame.draw.rect(self.display, RED, pygame.Rect(self.food.x, self.food.y, BLOCK_SIZE, BLOCK_SIZE))
         
-        text = font.render("Score: " + str(self.score), True, WHITE)
+        text = self.font.render("Score: " + str(self.score), True, WHITE)
         self.display.blit(text, [0, 0])
         pygame.display.flip()
         # self.visual = False
