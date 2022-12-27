@@ -145,7 +145,8 @@ def train(loadFromSave):
             mean_score = total_score / agent.n_games
             plot_mean_scores.append(mean_score)
             logging.info("Game: " + str(agent.n_games) + " Score: " + str(score) + " High score: " + str(record_score) + " Time: " + str(time()))
-            plot(plot_score, plot_mean_scores)
+            if agent.n_games % 50 == 0:
+                plot(plot_score, plot_mean_scores)
 if __name__ == "__main__":
     loadFromSave = False
     if 1 != len(sys.argv):
