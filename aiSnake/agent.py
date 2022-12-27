@@ -7,8 +7,12 @@ import logging
 from time import time
 import sys
 
-with open("runCount", 'r') as file:
-    runCount = int(file.read())
+import os
+if os.path.exists("runCount"):
+    with open("runCount", 'r') as file:
+        runCount = int(file.read())
+else:
+    runCount = 0
 with open("runCount", 'w') as file:
     file.write(str(runCount+1))
 
