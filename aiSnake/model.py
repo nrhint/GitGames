@@ -15,7 +15,8 @@ class Linear_QNet(nn.Module):
         x = self.linear2(x)
         return x
 
-    def save(self, filename = "model.pth"):
+    def save(self, runCount, size):
+        filename = "model-run%s-%s.pth"%(runCount, size)
         model_folder_path = './model'
         if not os.path.exists(model_folder_path):
             os.makedirs(model_folder_path)

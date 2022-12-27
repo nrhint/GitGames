@@ -6,7 +6,6 @@ import numpy as np
 
 pygame.init()
 font = pygame.font.Font('arial.ttf', 25)
-#font = pygame.font.SysFont('arial', 25)
 
 class Direction(Enum):
     RIGHT = 1
@@ -24,7 +23,7 @@ BLUE2 = (0, 100, 255)
 BLACK = (0,0,0)
 
 BLOCK_SIZE = 20
-SPEED = 20
+SPEED = 0
 
 class SnakeGameAI:
     
@@ -35,6 +34,7 @@ class SnakeGameAI:
         self.display = pygame.display.set_mode((self.w, self.h))
         pygame.display.set_caption('Snake')
         self.clock = pygame.time.Clock()
+        self.visual = False
         self.reset()
         
     def reset(self):
@@ -89,8 +89,9 @@ class SnakeGameAI:
             self.snake.pop()
         
         # 5. update ui and clock
-        self._update_ui()
-        self.clock.tick(SPEED)
+        if self.visual:
+            self._update_ui()
+            self.clock.tick(SPEED)
         # 6. return game over and score
         return reward, game_over, self.score
     
@@ -118,6 +119,7 @@ class SnakeGameAI:
         text = font.render("Score: " + str(self.score), True, WHITE)
         self.display.blit(text, [0, 0])
         pygame.display.flip()
+        self.visual = False
         
     def _move(self, action):
         # [straight, right, left]
@@ -148,23 +150,3 @@ class SnakeGameAI:
             y -= BLOCK_SIZE
 
         self.head = Point(x, y)
-
-        # x = self.head.x
-        # y = self.head.y
-        # if 1 == action[0]:
-        #     direction = self.direction.value
-        # elif 1 == action[1]:
-        #     direction = (self.direction.value+1)%4
-        # else:
-        #     direction = (self.direction.value-1)%4
-
-        # if direction == Direction.RIGHT.value:
-        #     x += BLOCK_SIZE
-        # elif direction == Direction.LEFT.value:
-        #     x -= BLOCK_SIZE
-        # elif direction == Direction.DOWN.value:
-        #     y += BLOCK_SIZE
-        # elif direction == Direction.UP.value:
-        #     y -= BLOCK_SIZE
-            
-        # self.head = Point(x, y)

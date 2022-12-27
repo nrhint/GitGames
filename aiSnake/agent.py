@@ -3,6 +3,17 @@ import random
 import numpy as np
 from collections import deque
 
+import logging
+from time import time
+
+with open("runCount", 'r') as file:
+    runCount = int(file.read())
+with open("runCount", 'w') as file:
+    file.write(str(runCount+1))
+
+logging.basicConfig(filename='logs/run%s.log'%runCount, encoding='utf-8', level=logging.INFO)
+logging.info('Run started at: %s'%time())
+
 from game import SnakeGameAI, Direction, Point, BLOCK_SIZE
 from model import Linear_QNet, QTrainer
 from helper import plot
@@ -103,6 +114,8 @@ def train():
     agent = Agent()
     game = SnakeGameAI()
     while True:
+        # if not agent.n_games%10:
+        #     game.visual = True
         state_old = agent.get_state(game)
 
         final_move = agent.get_action(state_old)
@@ -120,14 +133,14 @@ def train():
             agent.train_long_memory()
             if score > record_score:
                 record_score = score
-                agent.model.save()
+                agent.model.save(runCount, score)
 
-            print("Game", agent.n_games, "Score", score, "Record", record_score)
+            print("Game", agent.n_games, "Record", record_score, "Score", score)
             plot_score.append(score)
             total_score += score
             mean_score = total_score / agent.n_games
             plot_mean_scores.append(mean_score)
-            plot(plot_score, plot_mean_scores)
-
+            logging.info("Game: " + str(agent.n_games) + " Score: " + str(score) + " High score: " + str(record_score) + " Time: " + str(time()))
+            # plot(plot_score, plot_mean_scores)
 if __name__ == "__main__":
     train()
