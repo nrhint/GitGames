@@ -1,173 +1,133 @@
-##Nathan Hinton
-##Interface for penguin hop
+##Setup: scroll down twice. site: https://www.arcademics.com/games/penguin-hop
 
-#Using pynput:
-from time import sleep
-import threading
+import pyscreenshot# as ImageGrab
+#import os
 from pynput.mouse import Button, Controller
-from pynput.keyboard import Listener, KeyCode
+##from pynput.keyboard import Listener
+import time
+import PIL
 
+xPad = 200
+yPad = 160
 mouse = Controller()
 
-#name TestBotx
-#where x != 0
-#Define the keys used:
-exitKey = KeyCode(char='q')
-a = KeyCode(char='1')
-b = KeyCode(char='2')
-c = KeyCode(char='3')
-d = KeyCode(char='4')
+def screenGrab(delay = 0, name = 'test'):
+    time.sleep(delay)
+    box = ()
+    im = pyscreenshot.grab((xPad, yPad, xPad+950, yPad+540))
+    im.save(name+'.jpg')
+    return im
 
-y = 305
+def leftClick():
+    mouse.click(Button.left)
 
-targetCords = (340, 340, 610, 380)
-state1 = (110, 50, 210, 150)
-state2 = (330, 50, 430, 150)
-state3 = (550, 50, 650, 150)
-state4 = (770, 50, 870, 150)
+def moveMouse(x, y):
+    tx, ty = mouse.position
+    mouse.move((x-tx)+xPad, (y-ty)+yPad)
 
-stateAndCapsList ={
-    'Montgomery':'al', 
-    'Juneau':'ak', 
-    'Phoenix':'az', 
-    'Little Rock':'ar', 
-    'Sacramento':'ca', 
-    'Denver':'co', 
-    'Hartford':'ct', 
-    'Dover':'de', 
-    'Tallahassee':'fl', 
-    'Atlanta':'ga', 
-    'Honolulu':'hi', 
-    'Boise':'id', 
-    'Springfield':'il', 
-    'Indianapolis':'in', 
-    'Des Moines':'ia', 
-    'Topeka':'ks', 
-    'Frankfort':'ky', 
-    'Baton Rouge':'la', 
-    'Augusta':'me', 
-    'Annapolis':'md', 
-    'Boston':'ma', 
-    'Lansing':'mi', 
-    'Saint Paul':'mn', 
-    'Jackson':'ms', 
-    'Jefferson City':'mo', 
-    'Helena':'mt', 
-    'Lincoln':'ne', 
-    'Carson City':'nv', 
-    'Concord':'nh', 
-    'Trenton':'nj', 
-    'Santa Fe':'nm', 
-    'Albany':'ny', 
-    'Raleigh':'nc', 
-    'Bismarck':'nd', 
-    'Columbus':'oh', 
-    'Oklahoma City':'ok', 
-    'Salem':'or', 
-    'Harrisburg':'pa', 
-    'Providence':'ri', 
-    'Columbia':'sc', 
-    'Pierre':'sd', 
-    'Nashville':'tn', 
-    'Austin':'tx', 
-    'Salt Lake City':'ut', 
-    'Montpelier':'vt', 
-    'Richmond':'va', 
-    'Olympia':'wa', 
-    'Charleston':'wv', 
-    'Madison':'wi', 
-    'Cheyenne':'wy'}
+def clicker(pos):
+    if pos == 1:
+        base = (100, 175)
+        for x in range(0, 3):
+            for y in range(0, 3):
+                moveMouse(base[0]+(x*10), base[1]+(y*10))
+                leftClick()#time.sleep(.5)
+    elif pos == 2:
+        base = (350, 175)
+        for x in range(0, 3):
+            for y in range(0, 3):
+                moveMouse(base[0]+(x*10), base[1]+(y*10))
+                leftClick()#time.sleep(.5)
+    elif pos == 3:
+        base = (600, 175)
+        for x in range(0, 3):
+            for y in range(0, 3):
+                moveMouse(base[0]+(x*10), base[1]+(y*10))
+                leftClick()#time.sleep(.5)
+    elif pos == 4:
+        base = (825, 200)
+        for x in range(0, 7):
+            for y in range(0, 7):
+                moveMouse(base[0]+(x*10), base[1]+(y*10))
+                #time.sleep(.5)
+                leftClick()
 
-def resetMouse():
-    mouse.move(-2000, -2000)
-
-def click(x):
-    resetMouse()
-    mouse.move(x, y)
-    for a in range(-20, 30, 10):
-        #resetMouse()
-        mouse.move(a, 0)
-        #print(x+a, y)
-        for z in range(-20, 30, 10):
-            #resetMouse()
-            mouse.move(0, z)
-            mouse.click(Button.left)
-            #sleep(3)
-            #print(x+a, y+z)
-    #print("Clicked!")
-
-class kybd(threading.Thread):#Used for getting the kyboard input.
-    def __init__(self):
-        super(kybd, self).__init__()
-        self.x = 0
-
-test = kybd()#ClickMouse(delay, button)
-test.start()
+######Key clicker:
+def kbd():
+    import pynput
+    def on_press(key):
+        if key == pynput.keyboard.KeyCode.from_char('1'):
+            print(key)
+            clicker(1)
+        elif key == pynput.keyboard.KeyCode.from_char('2'):
+            print(key)
+            clicker(2)
+        elif key == pynput.keyboard.KeyCode.from_char('3'):
+            print(key)
+            clicker(3)
+        elif key == pynput.keyboard.KeyCode.from_char('4'):
+            print(key)
+            clicker(4)
+    l = pynput.keyboard.Listener(on_press = on_press)
+    l.start()
 
 
-def on_press(key):
-    #Logic for the keys:
-    if key == a:
-        click(350)
-    elif key == b:
-        click(600)
-    elif key == c:
-        click(775)
-    elif key == d:
-        click(1030)
-    elif key == exitKey:
-        listener.stop()
 
-#Start the image stuff:
-import pytesseract
-from PIL import Image, ImageEnhance, ImageFilter
-import tempfile
-import pyscreenshot as ss
-print("Loading...")
+from PIL import Image
 
-#Defineing things:
-def set_image_dpi(file_path):
-    im = Image.open(file_path)
-    length_x, width_y = im.size
-    factor = min(1, float(1024.0 / length_x))
-    size = int(factor * length_x), int(factor * width_y)
-    im_resized = im.resize(size, Image.ANTIALIAS)
-    temp_file = tempfile.NamedTemporaryFile(delete=False,   suffix='.png')
-    temp_filename = temp_file.name
-    im_resized.save(temp_filename, dpi=(300, 300))
-    return temp_filename
+def compute_average_image_color(img):
+    width, height = img.size
 
-sleep(2)
-##im = Image.open('screen.png')
-##text = pytesseract.image_to_string(im)
-##print("Searching")
-##for s in stateAndCapsList:
-##    if s in text:
-##        print(stateAndCapsList[s])
-##
-##print()
-##print("DATA")
-##print(text)
-its = pytesseract.image_to_string
+    r_total = 0
+    g_total = 0
+    b_total = 0
 
-def displayData():
-    print(its(im.crop(targetCords)))
-    print(its(im.crop(state1)))
-    print(its(im.crop(state2)))
-    print(its(im.crop(state3)))
-    print(its(im.crop(state4)))
-    im.crop(targetCords).show()
-    im.crop(state1).show()
-    im.crop(state2).show()
-    im.crop(state3).show()
-    im.crop(state4).show()
+    count = 0
+    for x in range(0, width):
+        for y in range(0, height):
+            r, g, b = img.getpixel((x,y))
+            r_total += r
+            g_total += g
+            b_total += b
+            count += 1
 
-##with Listener(on_press=on_press) as listener:
-##    listener.join()
-x = 0
+    return (r_total/count, g_total/count, b_total/count)
+
+#screenGrab(delay = 3)
+
+##Begin the game logic:
+#Start the game:
+capPos = (310, 478, 641, 533)
+def loadImages():
+    i = []
+    for x in range(0, 1000):
+        try:
+            i.append(PIL.Image.open(str(x)+'.jpg'))
+        except FileNotFoundError:
+            pass
+    return i
+time.sleep(1.5)
+print("starting game...")
+moveMouse(650, 35)
+leftClick()
+######Start game loop:
+#time.sleep(5)#Wait for timer and opening animation
+#kbd()
+images = loadImages()
 while True:
-    print()
-    print(x)
-    im = ss.grab((200, 200, 1100, 600))
-    displayData()
-    x += 1
+    #print("Taking screen shot..")
+    test = screenGrab()
+    test = test.crop(capPos)
+    test.save('tmp.jpg')
+    test = Image.open('tmp.jpg')
+    c = compute_average_image_color(test)
+    if test in images:
+        pass
+    elif c[1] > 70:
+        pass
+    else:
+        print("NewPicture")
+        test.save(str(len(images)+1)+'.jpg')
+        images.append(PIL.Image.open(str(len(images)+1)+'.jpg'))
+        images = loadImages()
+    
