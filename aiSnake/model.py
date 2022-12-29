@@ -52,8 +52,8 @@ class QTrainer:
 
         self.optimizer.step()
 
-    def save(self, runCount, size):
-        filename = "model-run%s-%s.pth"%(runCount, size)
+    def save(self, runCount, size, name):
+        filename = "model-run%s-snake%s-%s.pth"%(runCount, name, size)
         model_folder_path = './model'
         checkpoint = {
             'state_dict': self.model.state_dict(),
@@ -65,10 +65,13 @@ class QTrainer:
         filename = os.path.join(model_folder_path, filename)
         torch.save(checkpoint, filename)
 
-    def load(self):
-        runNumber = input("Enter the run number: ")
-        highScore = input("Enter the high score of the run: ")
-        filename = "./model/model-run%s-%s.pth"%(runNumber, highScore)
+    def load(self, filename = None):
+        if filename == None:
+            runNumber = input("Enter the run number: ")
+            snakeNumber = input("Enter the snake number: ")
+            highScore = input("Enter the high score of the run: ")
+            if runNumber != "":
+                filename = "./model/model-run%s-snake%s-%s.pth"%(runNumber, snakeNumber, highScore)
         checkpoint = torch.load(filename)
         self.model.load_state_dict(checkpoint['state_dict'])
         self.optimizer.load_state_dict(checkpoint['optimizer'])
