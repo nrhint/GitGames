@@ -13,8 +13,10 @@ class GameMap:
         self.map_data_raw = self.map_data_raw.splitlines()
         self.map = []
         for item in self.map_data_raw:
-            if "SIZE:" in item[0:6]:
+            if "SIZE:" == item[0:6]:
                 self.width, self.height = item[6:].split("x")
+            elif "#"  == item[0] and item != "#":
+                print(f"Unknown mark of {item}")
             else: #This is a map line:
                 self.map.append(item)
     
