@@ -12,20 +12,29 @@ class GameMap:
         
         self.map_data_raw = self.map_data_raw.splitlines()
         self.map = []
+        self.players_on_map = []
         for item in self.map_data_raw:
-            if "SIZE:" == item[0:6]:
+            if "#SIZE:" == item[0:6]:
                 self.width, self.height = item[6:].split("x")
-            elif "#"  == item[0] and item != "#":
-                print(f"Unknown mark of {item}")
+            elif item == "#":
+                pass
+            elif item[0] == "#" and item[1:item.index(':')] not in self.players_on_map:
+                self.players_on_map.append(item[1:item.index(':')])
             else: #This is a map line:
-                self.map.append(item)
+                self.map.append(item.split(" "))
     
+    def get_players(self):
+        return self.players_on_map
+
+    def get_at(self, x, y):
+        return self.map[x][y]
+
     def print_map(self, mask = [], player_data = {}):
-        if mask == []:
-            for line in self.map:
-                print(line)
-        else:
-            print("The masking feature is not implimented yet. This will allow the players to only see things near their units and stuff")
+        for line in self.map:
+            line_string = ""
+            for item in line:
+                line_string += f"{item} "
+            print(line_string)
     
     def get_help(self):
         with open("maps/map_info.txt", "r") as help_file:
