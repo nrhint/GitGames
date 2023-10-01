@@ -7,7 +7,7 @@ class GameMap:
             with open(map_file, 'r') as file:
                 self.map_data_raw = file.read()
         except FileNotFoundError:
-            print("ERRR: MAP FILE NOT FOUND!!!")
+            print("ERROR: MAP FILE NOT FOUND!!!")
             quit(1)
         
         self.map = self.map_data_raw.splitlines()
