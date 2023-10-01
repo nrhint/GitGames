@@ -1,0 +1,11 @@
+#This is the map format that will be used:
+#
+#All lowercase letters are terain and uppercase are units
+#
+w = water
+l = land
+g = gold
+s = silver
+d = diamond
+t = trees
+h = bridge
