@@ -9,3 +9,4 @@ s = silver
 d = diamond
 t = trees
 h = bridge
+b = bunker
